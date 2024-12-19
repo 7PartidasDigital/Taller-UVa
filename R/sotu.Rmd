@@ -1,30 +1,30 @@
 ---
-title: "A hands-on in R for Humanists: Working with texts"
+title: "R para los de Letras: Trabajando con textos"
 author: "J. M. Fradejas"
-date: "2023.09.21"
+date: "2024.12.19"
 output: html_notebook
 ---
 <div>
 <center>
-<img src="https://raw.githubusercontent.com/7PartidasDigital/MLex/master/image/MLex-logo.png" width="250"/>
-<center>
+<img src="https://fyl.uva.es/wp-content/uploads/2020/07/fyluva-logo.png" width="350"/>
+</center>
 </div>
 
 
 # Introduction
 
-In the previous NoteBook we learnt to install R, RStudio and the libraries that we will use in the rest of the session. Then we also indicated that whenever you see a gray box with code inside it (as de box below), you have to select it, cut it, and paste it into the RStudio editor pane and to run it with CMD/CONTROL + ENTER or by clicking the Run icon on the rigth top margin of the editor pane. 
+En el cuaderno anterior aprendiste a instalar R, RStudio y las librerías que utilizaremos en durante este taller. También te explique que siempre que veas una caja gris con código dentro de ella (como la que hay a continuación), debes seleccionar el contenido, cortarlo y pegarlo en el editor de RStudio y que debía ejecutarlo bien con la combinación `CTRL/CMD+`⏎ (`CTRL` en Windows; `CMD` en Mac) o haciendo clic en el icono Run que hay en la parte superior derecha de la ventana del editor.
 
-Let’s start by setting the basic parameters for this session.
+Vamosa comenzar estableciendo los parámetros básicos de esta sesión
 
 ```{r, message=F, warning=F}
-# set options
+# Establecer las opciones
 options(stringsAsFactors = F)                           
-options(scipen = 100) 
+options(scipen = 999) 
 options(max.print=100) 
 ```
 
-and loading all the libraries that we are going to use.
+y cargando las librería que usaremos.
 
 ```{r message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -34,65 +34,78 @@ library(stopwords)
 ```
 
 
-# Working with texts{-}
+# Trabajar con textos{-}
 
-Although R was created to do statistical analysis and visualize data, it also serves to handle textual data that we can convert into statistical data and visualize them.
+Aunque R se creó para el análisis estadístico y la visualización de los resultados de esos análisis, también es útil para manejar datos textuales que podemos convertir en datos estadísticos y visualizarlos.
 
 
-## Loading text data{-}
+## Cargar datos textuales{-}
 
-A classical corpus to teach the basics of text handling with R are the State of the Union Address (SOTU), an annual message delivered, since 1790, by the President of the United States to a joint session of the United States Congress. We will be using it.
+Un corpus clásico para enseñar los principios de la manipulación de textos con R es el _State of the Union Address_ (SOTU), un informe anual que, desde 1790, presenta el Presidente de los Estados Unidos en un sesión conjunta del Congreso. Lo vamos a utilizar, aunque también podríamos hacer uso de los mensajes de Navidad que pronuncia el Jefe del Estado en de Nochebuena, e incluso los debates del Estado de la Nación o los Debates de Investidura, o cualquier otro conjunto (corpus) de datos que se quiera explorar.
 
-All SOTU messages are accesible in the internet, from several sources, I have gathered them and made some cleaning and the are available in a GitHub repository. To load them we can use the `read_Lines` which takes the file name of the text as its first argument (in this case is an internet URL). Let's mine, for a while the 2022 speech.
+All todos los SOTU se pueden conseguir en la red, hay varias fuentes que los han publicado. Sin embargo, los he cosechado y he hecho una pequeña labor de limpieza y están disponibles en un repositorio de GitHub. Para cargarlos se puede utilizar la función `read_Lines` cuyo primer argumento es el nombre del fichero que contiene el texto (en este caso es una dirección —URL— de internet). Minemos duranto un ratito el discurso de 2022.
 
-The very first thing is to load it in R into an object named `last_sotu`.
+Lo primero de todo es cargarlo en un **objeto** que llamaremos `last_sotu`.
 
 ```{r, message=FALSE, warning=FALSE}
 last_sotu <- read_lines(url("https://raw.githubusercontent.com/7PartidasDigital/MLex/master/sotu/242.txt"))
 
-# inspect data (will show the very first words of the file.)
+# Inspeccionemos el texto (solo verás la primera línea.)
 
 str(last_sotu)
 ```
 
-Once it is contained in an object, it is very easy to extract frequency information and to create frequency lists. We can do this by first using the `unnest_tokens` function which splits texts into individual words (tokens), and then use the `count` function to get the raw frequencies of all word types in a text.
+Una vez que lo hemos guardado en un **objeto**, es muy sencillo extraer información acerca de la frecuencia de las palabras que contiene y crear listas de palabras. Para lograrlo lo primero que hay que hacer es utilizar la función `unnest_tokens`, que dividirá el texto en palabras (tokens) y después usaremos la funcición `count` para conocer las frwecuencias absolutas de cada palabra tipo.
 
-In the first place, we are transforming the long text into a kind of table with the `tibble` function. It will make text wrangling easier.
+Lo primero que hay que hacer es transformar ese extenso texto en una especie de tabla con la función `tibble`. Esto hará que podamos manejarlo con mayor facilidad.
 
 ```{r, message=FALSE, warning=FALSE}
 tidy_sotu <- tibble(text = last_sotu)
 
-# inspect data (10 first entries)
+# Inspeccionamos los datos (solo las 10 primeras entradas)
 
 tidy_sotu
 ```
 
-Each line of this table corresponds to a paragraph of the speech, that is, it includes all the text that is before each tap of the `return` or `enter` key. Now we can split it into tokens.
+<div class="warning" style='padding:0.1em; background-color:#1e8449; color:#f2f2f2'>
+<span>
+<p style='margin-top:1em; text-align:center'>
+<b>ATENCIÓN</b><br>Los nombres de los **objetos** los voy a utilizar en inglés, pero nada impide que uses palabras de la lengua que mejor que convenga. Solo hay unas pequeñas limitaciones: no pueden empezar por un número; distingue entre mayúsculas y minúsculas —no es lo mismo `Ciudad` que `ciudad` que `CIUDAD` son tres nombres nombre diferentes— y hay una serie de caracteres que no se pueden utilizar (los símbolos matemáticos, las barras, y algunos otros).<br>Y una recomendación: no uses letras con tildes, pueden ser fuente de tremendos quebraderos de cabeza.<br></p>
+<p style='margin-left:1em;'>
+</p></span>
+</div>
+<br>
 
-Every time you see a table like the one above, you can go through it by tapping the `Next` label in the lower left of the table.
+Cada línea de esta tabla corresponde a un párrafo del discurso, es decir, incluye todo el texto que hay antes de cada golpe de la tecla ⏎. Ahora lo podemos dividir en tokens.
+
+Siempre que veas una tabla con la de antes, puedes recorrerla haciendo clic en el `Next` que hay en la parte inferior de la tabla. 
 
 ```{r, message=FALSE, warning=FALSE}
 tidy_words <- tidy_sotu %>%
   unnest_tokens(word, text) %>%
   count(word, sort=T)
 
-# inspect data (10 first entries)
+# Inspeccionamos los datos (solo las 10 primeras entradas)
 
 tidy_words
 ```
 
-We have told R to split the text in `tidy_sotu`, divide it into words, count them and order them in decreasing frequency and store it in an object named `tidy_words`.
+Lo que le henmos dicho a R que divida el texto que hay en el **objeto** `tidy_sotu` en palabras (tokens), que las cuente, las ordene de mayor a menor frecuencia (`n`) y las guarden en otro object llamado `tidy_words`.
 
-As easy as dividing the texto into tokens, is to extract N-grams, that is, sequences of n consecutive words. That's so because the `unnest_tokens` function have an argument called `token` in which we can specify that we want to extract `ngrams`. If we do this, then we need to specify the `n` (the number of words) as a separate argument. Below we specify that we want the frequencies of all 4-grams, 
+Fíjate que en el margen inferior, en el lado izquierdo dice `1-10 of 1.735 rows`. Esto quiere decir que el texto del discurso de 2022 tiene 1735 palabras diferentes (palabras tipo), mientras que la columna `n` indica cuentas veces aparece cada una de las palabras tipo.
+
+Tan fácil como dividir el texto en palabras individuales, es el extraer los N-grams, es decir, secuencias de n palabras consecutivas. Es sencillo porque la función `unnest_tokens` tiene un argumento llamado `token` por medio del cual le puedes indicar a R que quieres extraer `ngrams`. Si es lo que te interesa, entonces debes especificar el número de palabras que que ha de agrupar; para ello se utiliza el argumento `n`. Con el código que hay a continuación le pides a R que quieres extraer todos los grupos de cuatro palabras (4-grams) y que informe de la frecuencia absoluta y que las presente en orden decreciente. 
 
 ```{r, message=FALSE, warning=FALSE}
 tidy_sotu %>%
-  unnest_tokens(word, text, token = "ngrams", n = 4) %>%
-  drop_na() %>%
+  unnest_tokens(word,
+                text,
+                token = "ngrams",
+                n = 4) %>%
   count(word, sort=T)
 ```
 
-It is also possible to split a text into sentences rather than words. It is easy because the argument `tokens` from  `unnest_tokens` function can take the value `sentences`.
+También es posible devidir el texto en oraciones (no enredemos con los coneptos de oración, aquí funcionan de otra manera) en vez de en palabras. De nuevo es fácil de hacer porque el argumento `tokens` de la función `unnest_tokens` puede tener el valor `sentences`.
 
 ```{r message=FALSE, warning=FALSE}
 tidy_sotu %>%
@@ -101,7 +114,16 @@ tidy_sotu %>%
                 token = "sentences")
 ```
 
-In the 2022 Biden's speech there are `6553` words. It can easily calculated by adding all the `n` values of the `tidy_words` object by means of the function `sum`.
+<div class="warning" style='padding:0.1em; background-color:#1e8449; color:#f2f2f2'>
+<span>
+<p style='margin-top:1em; text-align:center'>
+<b>ATENCIÓN</b><br>Cuando se le pide que divida cualquier texto en palabras, n-grams u oraciones, una de las cosas que hace es convertir las mayúsculas en minúsculas de manera que _First_ en _First Lady_ y la de cualquier caso de _first_ que pueda aparecer a lo largo del texto las cuente como la misma palabra tipo. Sé que esto es problemático en algunos casos, pero hay herramientas para solucionarlo.<br></p>
+<p style='margin-left:1em;'>
+</p></span>
+</div>
+<br>
+
+Ya hemos visto que en el discurso de Biden de 2022 había 1735 palabras diferentes (palabras tipo), y vimos que cada una de ella aparece un número determinados de veces (_the_ aparece 300 veces, _and_ 264 y _to_ 234), pero no sabes cuántas son las palabras que conforman el discurso. Hay `6553` palabras token. la forma de calcularso es sumando todos los valores de `n` del objeto `tidy_words` y se consigue con la función `sum`.
 
 ```{r, message=FALSE, warning=FALSE}
 sum(tidy_words$n)
@@ -110,7 +132,7 @@ sum(tidy_words$n)
 
 ## Stopwords{-}
 
-When we divided the speech into tokens, we saw that extremely common words such as “the”, “to”, “and”, “of”, and “we” float to the top of the table. These words are not particularly insightful for determining the content of the speech (for other kinds of text mining and linguistic analysis they are precious!). We can remove them.
+Al dividir el texto en tokens, has visto que palabras corrientes como “the”, “to”, “and”, “of” y “we” están en lo alto de la tabla. estas palabras poco nos pueden decir del contenido del discurso (en otros tipos de análisis estas palabras son oro molido). Vas a borrarlas.
 
 ```{r, message=FALSE, warning=FALSE}
 data(stop_words)
@@ -118,67 +140,70 @@ tidy_words %>%
   anti_join(stop_words)
 ```
 
-However, still there are some very common words, or contractions, as “let's”, “let's”, “that's”, and “it's”. We might want to find the words that are represented much more often in this text than over a large external corpus of English. To accomplish this we need a dataset giving these frequencies. A good one is the [Peter Norvig's](https://www.kaggle.com/datasets/rtatman/english-word-frequency) using the Google Web Trillion Word Corpus, collected from data gathered via Google’s crawling of known English websites.
+A pesar de haber elminado todas las _palabras de función_ o _palabras vacías_ hay, sin embargo, algunas palabras muy corrientes y contracciones como “let's”, “that's”, “it's” o “we're”. Quizá te interese localizar todas aquellas palabras que se usan con muchísima más frecuencia en este texto de lo que se utilizan en un basto corpus del inglés. para conseguirlo, necesitas un dataset que recopile estas frecuencias. Uno muy bueno para eso es el de [Peter Norvig's](https://www.kaggle.com/datasets/rtatman/english-word-frequency) que se basa en el Google Web Trillion Word Corpus, que se ha contruido con textos extraidos de sitio web en inglés.
 
 ```{r, message=FALSE, warning=FALSE}
 word_frequencies <- read_csv("https://raw.githubusercontent.com/programminghistorian/jekyll/gh-pages/assets/basic-text-processing-in-r/word_frequency.csv")
 head(word_frequencies)
 ```
 
-The first column lists the language (always “en” for English in this case), the second gives the word and the third the percentage of the Trillion Word Corpus consisting of the given word.
+La primera columna indica la lengua de que se trata (es siempe“en” de inglés), la segunda da la palabras y la tercera porcentaje de uso de cada palabra en el Trillion Word Corpus.
 
-To combine these overall word frequencies with the table constructed from 2022 Biden's State of the Union speech, we can utilize the `inner_join` function. This function takes two data sets and combines them on all commonly named columns; in this case the common column is the one named `word`.
+Para combinar todas estas frecuencias con la table en la que tienes con los datos del discurso de Biden de 2022, usarás la función `inner_join`. esta función toma dos tablas (o dos dataset) y los combina en una solo en virtud de las columnas que tengan el mismo nombre; en este caso la columna común es la llamada `word`.
 
 ```{r, message=FALSE, warning=FALSE}
 tidy_words %>%
   inner_join(word_frequencies) %>%
   filter(frequency < 0.1)
 ```
-
-This list is starting to look a bit more interesting. Terms such as “america”, “american(s)”, “year”, “people”, and “world” float to the top and we might speculate that they are used a lot in speeches by politicians, specially in their annual addresses, but relatively less so in other domains. Setting the threshold even lower, to 0.002, gives an even better summary of the speech.
+Esta lista ya empieza a tener un aspecto mejor. Términos como “america”, “american(s)”, “year”, “people” y “world” han escalado hasta la parte superior de la tabla y ya podemos especular que aparecen con muchas frencuencia en discursos de políticos, como es el caso del SOTU, pero su ocurrencia es relativamente menor en otros dominios. Si establecieras un umbral mucho más bajo, digamos del 0.02, podrás ver un resumen mucha más interesante del discurso.
 
 ```{r, message=FALSE, warning=FALSE}
 tidy_words %>%
   inner_join(word_frequencies) %>%
-  filter(frequency < 0.002)
+  filter(frequency < 0.02)
 ```
 
-If you tap in the `Next` tag of the table above, you will see quite a few interesting terms as “putin”, “ukrainian”, “allies”, “pandemic”, “deficit”, and “inflation” that seem to suggest some of the key themes of the speech.
+Si haces clic en el `Next` de la parte baja de la tabla anterior, verás que aparecen algunos términos interesantes como “putin”, “ukrainian”, “allies”, “pandemic”, “deficit” e “inflation”. Estos paren ser algunos de los temas del discurso.
 
-Before getting into deeper waters, we will make a brief summary, of the five most used words, in speech we have been exploring. To do it, we need a table with some metadata to fully identify every speech. This table holds the name of the President, year of the SOTU address, years in office (somehow irrelevant), political party, and type of address as the could be written or spoken (speech). So let us load into the computer.
+Antes de meterte en agua más profundas, vas ver un breve resumen basado en las cinco palabras más frecuentes de este discurso. para conseguirlo, necesitas otra trabla con una serie de metadatos que te permitan identificar totalmente cada uno de los discursos. Esta tabla coniene el nombre del Presidente, año del discurso, años en los que estuvo en la Casa Blanca (algo realmente irrelevante), partido al que pertenece y tipo de discurso, pues pueden escritos o hablados. Vas a cargarlo en tu ordenador.
 
 ```{r, message=FALSE, warning=FALSE}
 sotu_meta <- read_tsv("https://raw.githubusercontent.com/7PartidasDigital/MLex/master/sotu_meta.txt")
-# Inspect the data
+# Muestra el contenido (solo el principio)
 sotu_meta
 ```
 
-Now it is time to summarize it in just one line. At the end of the instruction you have a `5`, it means that it will select the five most used words, but it can be increased to any number (a summary over 10 will not be very informative)
+Ya es hora de resumirlo en una sola línea. Al final de la instrucción hay un `5`, lo cual implica que seleccionará las cinco palabras más utilizadas, se puede incrementar a la cantidad que quieras, pero una sumario de más de 10 paalbras será muy poco informativo).
 
 ```{r, message=FALSE, warning=FALSE, error = FALSE}
 address_summary <- tidy_words %>%
   inner_join(word_frequencies) %>%
-  filter(frequency < 0.002)
-result <- c(sotu_meta$president[242], sotu_meta$year[242], address_summary$word[1:5])
+  filter(frequency < 0.02)
+result <- c(sotu_meta$president[242],
+            sotu_meta$year[242],
+            address_summary$word[1:5])
 paste(result, collapse = "; ")
 ```
+Creo que se podía haber eliminado la palabra "tonight", no dice nada del tema, tan solo que lo leyó una tarde noche.
 
-## Concordancing and KWICs{-}
+## Concordancias KWIC{-}
 
-Creating concordances or key-word-in-context (KWIC) displays is one of the most common practices when dealing with text data. Fortunately, there exist ready-made functions that make this a very easy task in R. We will use the `kwic` function from the `quanteda` package to create kwics here. 
+Crear unas concardancias o tablas de palabras clave en contexto _key-word-in-context_ (KWIC) es uno de los procedimientos mñás usuales cuando se analizan datos textuales. No tienes que esforzarte mucho para conseguirlo, hay varias funciones que lo harán con sencillez. Utilizará la función `kwic` de la librería `quanteda` para crear una concordancia KWIC, pero exige dividir el texto en tokens con la función `tokens`. 
 
 ```{r, message=FALSE, warning=FALSE}
-kwic_multiple <- kwic(last_sotu, 
-       pattern = "Ukraine",
+kwic_multiple <- last_sotu %>%
+  tokens() %>%
+  kwic(pattern = "Ukraine",
        window = 3) %>%
   as.data.frame()
-# inspect data
+# Inspecciona el comienzo de la tabla
 head(kwic_multiple)
 ```
 
-# Analyzing Every State of the Union Address from 1790 to 2023
+# Analizar todos y cada uno de los Discursos del State of the Union desde 1790 hasta 2024
 
-The first step in analyzing the entire State of the Union Addresses corpus is to read all of the addresses into R together. This involves to use the `readLines` function as before, we will `paste` together all paragraphs of every speech, add an identification system to know which speech is which speech. And we have to put all this within a loop because it has to do it 243 and store it in just one table: `all_sotu`.
+El primer paso para analizar todos el corpus de los discursos del State of the Union es hacer que R los lea todos a la vez. Esto implica utilizar, como has hecho antes, la función `readLines`, pero unirás todos los párrafos de cada uno de los discursos con la función`paste`, añadirás un sistema de identificación para saber qué discurso es cada uno de ellos. Todo eswte se tiene que hacer por medio de un bucle, porque quieres meter nada más y nada menos que 244 discursos en una única tabal (u objeto) llamada `all_sotu`.
 
 As the files are in the web, the very first step is to declare the full url for every speech and an empty table (`all_sotu`) to hold all the texts. The instruction to create the file names is a two steps process. Firstly we will store the invariable part of the URL in `base_url`. An secondly, to create the file names, that are made up of a number between `1` and `243`, we will use the `sprintf` function, that allows a formula to add the numbers, with leading zeros, from `001` … `099`… `243`, to the file extension `.txt` and glue it the invariable part of the url. 
 
