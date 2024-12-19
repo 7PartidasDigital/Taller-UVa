@@ -218,10 +218,9 @@ install.packages("quanteda")
 install.packages("stopwords")
 ```
 
-Se estará un buen rato, depende de tu conexión a internet, mostrándote un motón de información en la consola.
+Se estará un buen rato, depende de tu conexión a internet, mostrándote un motón de información en la consola. En la imagen siguiente te muestro algo de lo que podrías ver mientras instalas las librería. Ten en cuenta que esta es de una, y todas las que le son necearias, que no vas a necesitar por ahora. Al final te informa de dónde ha guardado las librerías
 
-
-```{r echo=F, fig.cap="Al instalar la librería stylo —que no nececistas por ahora— instaló seis librarías más que necesita. Al final informa de que todo ha ido bien", message=FALSE, warning=FALSE, fig.align="center", out.width='75%'}
+```{r echo=F, fig.cap="", message=FALSE, warning=FALSE, fig.align="center", out.width='75%'}
 knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/Taller-UVa/master/images/UVa_013.png")
 ``` 
 
