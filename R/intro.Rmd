@@ -22,29 +22,30 @@ El objetivo de este taller es introducirse en el uso de R como herramienta para 
 
 Este taller está dirigido a principiantes con el objetivo de mostrar cómo configurar una sesión de R en RStudio, cómo configurar proyectos en R y cómo realizar operaciones básicas usando R.
 
-## Los objetivos de este taller{-}
+## Objetivos{-}
 
 Los objetivos de este taller son:
 
-- Instalar R 
-- Cómo moverse en R y RStudio
+- Instalar R
+- Instalar RStudio
+- Manejarse en R y RStudio
 - Cómo crear y trabajar con proyectos en R
 - Dónde buscar ayuda y aprender más acerca de R
-- Comprender los principios básicos al trabajar con datos: cargarlos, guardarlos, trabajar con tablas, crear un gráfico sencillo
+- Comprender los principios básicos al trabajar con datos: cargarlos, guardarlos, trabajar con tablas, crear un gráfico sencillo.
 
 
 ## Audiencia{-}
 
-Este taller es para principiantes. No es necesario saber nada de R, ni de lenguas de programación.
+Este taller es para principiantes. No es necesario saber nada de R, ni de lenguajes de programación.
 
 Se ruega que todos los participantes traigan su propio ordenador con el software ya instalado. Al usar su propio ordenador, nos aseguramos de que tras el taller podrán continuar usando lo que se ha aprendido una vez haya finalizado el taller.
 
 
 ## Instalar R y RStudio{-}
 
-Durante el taller, se usará RSudio. RStudio es un exelente manera de manejar el lenguaje de programación R. Para usarlo, debes intalar tanto R como RStudio.
+Durante el taller, se usará RSudio. RStudio es una excelente manera de manejar el lenguaje de programación R. Para usarlo, debes instalar tanto R como RStudio.
 
-Por favor, sigue las instrucciones que hay a continuación para instalar R y RStudio y hazlo antes de acudir al taller. Asegúrate de que el software funciona que debe una vez instalado. ¡Te diremos cómo hacerlo!
+Por favor, sigue las instrucciones que hay a continuación para instalar R y RStudio y hazlo antes de acudir al taller. Asegúrate de que el software funciona como debe una vez instalado. ¡Te diremos cómo hacerlo!
 
 <div>
 <center>
@@ -71,10 +72,10 @@ Por favor, sigue las instrucciones que hay a continuación para instalar R y RSt
     - Desarga R. Si tienes un ordenador con los chips M1/M2/M3/M4 [usa este enlace](https://cran.rediris.es/bin/macosx/big-sur-arm64/base/R-4.4.2-arm64.pkg), pero si tu ordenador tiene un procesador Intel, entonces [usa este otro enlace](https://cran.rediris.es/bin/macosx/big-sur-x86_64/base/R-4.4.2-x86_64.pkg)
     - Ejecuta el fichero `.pkg` que acaba de bajar (estará en la carpeta `Descargas`), y sigue las instrucciones
     - Ahora descarga RStudio. [Este enlace lo descargará](https://download1.rstudio.org/electron/macos/RStudio-2024.12.0-467.dmg)
-    - Cuando se haya descargado, ejecuta el fichero `R-4.4.2-arm64.pkg` o `R-4.4.2-x86_64.pkg` (estará en la carpeta `Descargas`), y sigue las instrucciones
+    - Cuando se haya descargado, ejecuta el fichero `.dmg` (estará en la carpeta `Descargas`), y sigue las instrucciones
     - Una vez que se haya finalizado la instalación, abre Rstudio y asegúrate de que funciona y de que no haya mensajes de error.
     
-Cuando arranques RStudio, verás que se parece a esta imagen (el fondo será blanco y no negro):
+Cuando arranques RStudio, verás que se abreve una ventana que se aparece a la de esta imagen (el fondo será blanco y no negro —ya llegará el momento de _tunearlo_—):
 
 ```{r mlex01, echo=F, fig.cap="", message=FALSE, warning=FALSE, out.width='100%', fig.align="center"}
 knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/Taller-UVa/master/images/UVa_001.png")
@@ -82,31 +83,31 @@ knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/Tall
 
 # R y RStudio. Lo básico{-}
 
-RStudio es un IDE - Integrated Development Environment, una especie de escritorio que facilita el acceso a R. La gran ventaja es de este aplicativo es que se pueden gestionar con gran facilidad los _scripts_ de R, los ficheros y los directorios de los proyectos. Este entorno de trabajo permite editar y ejecutar el código (_scripts_), ver los resultados y los gráficos que trace. Es más, se pueden ver las variables y los objetos que se están ejecutando en la ventana `Environment`(más, más abajo 👇).
+RStudio es un IDE (Integrated Development Environment), una especie de escritorio que facilita el acceso a R. La gran ventaja es de este aplicativo es que se pueden gestionar con gran facilidad los _scripts_ de R, los ficheros y los directorios de los proyectos. Este entorno de trabajo permite editar y ejecutar el código (_scripts_), ver los resultados y los gráficos que dibuje. Es más, se pueden ver las variables y los objetos que se están ejecutando en la ventana `Environment` (más, más abajo 👇).
 
 ## RStudio: Paneles{-}
 
-El escritorio de RStudio divide la pantalla en cuatro ventanas que llama **panes** (o **paneles**):
+El escritorio de RStudio divide la pantalla en cuatro ventanas que llaman **panes** (o **paneles**):
 
 1. Editor de ficheros
 2. Environment
 3. Console
 4. Gestion (Gestor de ficheros (_Files_), Gráfico (_plots_), Ayuda (_help_), Visor (_Viewer), Presentación (_Presentation_) y Librarías (_packages_).
 
-Los dos más importante son la Consola (parte inferior, abajo) y el editor de ficheros (parte superior, izquierda).
-Los paneles de variables gestión están en la parte de derecha y tienen varias pestañas: 
+Los dos más importantes son la Consola (parte inferior, izquierda) y el editor de ficheros (parte superior, izquierda).
+Los paneles del entorno (Global Environment) y gestión están en la parte de derecha y tienen varias pestañas:
 
-* **Environment** (arriba): Presenta todos los objetos, variables, y conjunto de datos (_data sets_) que se están usando.
-* **History** (arriba): Recoge todas las instrucciones ejecutadas rencientemente o que están asociadasa un proyecto determinado
+* **Environment** (arriba): Presenta todos los objetos, variables, y conjuntos de datos (_data sets_) que se están usando.
+* **History** (arriba): Recoge todas las instrucciones ejecutadas recientemente o que están asociadas a un proyecto determinado.
 * **Plots** (abajo): Cualquier gráfico se imprimirá en ese espacio
-* **Help** (abajo): es donde buscar la ayuda la cualquier librería o función. Si escribes `?` y el nombre de una función en la consola, la ayuda aparecerá en la ventana **Help**. 
-* **Files** (abajo): Muesrtra los ficheros que hay en el directorio de trabajo, y tienes varias posibilidades (crear nuevos directorios o carpetas (_New Folder_), crear un nuevo fichero (_New File_), borrarlo (_Delete_), renombrarlo (_Rename_) y otras varias posibilidades en ⚙️ _More_)
+* **Help** (abajo): Es donde buscar la ayuda de cualquier librería o función.
+* **Files** (abajo): Muestra los ficheros que hay en el directorio de trabajo. Tienes varias posibilidades (crear nuevos directorios o carpetas (_New Folder_), crear un nuevo fichero (_New File_), borrarlo (_Delete_), renombrarlo (_Rename_) y otras varias posibilidades en ⚙️ _More_)
 
-### Consola de R (panel, ventana inferior izquierdo){-}
+### Consola de R (ventana inferior izquierdo){-}
 
 La consola permite ejecutar inemdiatamente cualquier función o instrucción de R. Aquí puedes experimentar con las funciones, o, sencillamente, imprimir los datos para verlos.
  
-Para usarlo hay que escribir la orden tras `>` y pulsar ⏎ para ejecutar la orden que se quiera que realice R.
+Para usarlo hay que escribir la orden tras `>` y pulsar ⏎ para ejecutar la orden (el código) que se quiera que realice R.
 
 ***
 
@@ -137,13 +138,13 @@ knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/Tall
 
 ***
 
-En esta orden, el signo de adición `+` es el **operador**. Los operadores son símbolos que representan algún tipo de acción. R, sin embargo, es muchísima más que una sencilla calculadora. Para poderle sacar el máximo partido es necesario comprender que son los **objetos**, las **funciones** y los **índices** (el número que aparece entre corchetes en los resultados que se imprimen en la consola). Aprenderás cómo usarlos según avanzamos.
+En esta orden, el signo de adición `+` es el **operador**. Los operadores son símbolos que representan algún tipo de acción. R, sin embargo, es muchísimo más que una sencilla calculadora. Para poderle sacar el máximo partido es necesario comprender que son los **objetos**, las **funciones** y los **índices** (el número que aparece entre corchetes en los resultados que se imprimen en la consola). Aprenderás cómo usarlos según avanzamos.
 
 Por ahora, considera que los *objetos* son *nombres* y que las *funciones* son *verbos*. 
 
 ## El editor de _scripts_ (arriba a la izquierda){-}
 
-La ventana del editor solo se abre si se le dice que se abra. es muy flexible puesto que permite moverte por el texto de un _script_, y coloreará los diversos componentes de una expresión (u orden o comando). Te permite guardar el _script_, reutilizarlo o corregir los errores sin tener que reescribir todo. La manera de abrir el editor es haciendo clic en `File`
+La ventana del editor solo se abre si se le dice que se abra. Es muy flexible puesto que permite moverte por el texto de un _script_, y coloreará los diversos componentes de una expresión (orden o comando). Te permite guardar el _script_, reutilizarlo o corregir los errores sin tener que reescribir todo. La manera de abrir el editor es haciendo clic en `File`
 
 
 ```{r mlex02, echo=F, fig.cap="", message=FALSE, warning=FALSE, fig.align="center", out.width='75%'}
@@ -160,11 +161,11 @@ Este `R Script` es donde harás todo el trabajo de programación.
 
 ## Ejecutar un `script`{-}
 
-Al contrario que la consola que viste antes, que ejecuta el código inmediatamente, el editor no lo hace tan pronto como se pulsa ⏎. Para conseguirlo, hay que situar el cursor en la primera línea de un comando del _script_, y pulsar simultáneamente `CTRL/CMD+`⏎ (`CTRL` en Windows; `CMD` en Mac).
+Al contrario que la consola que viste antes, que ejecuta el código inmediatamente, el editor no lo hace tan pronto como se pulsa ⏎ (tan solo pasará a la línea siguiente). Para conseguirlo, hay que situar el cursor en la primera línea de un comando del _script_, y pulsar simultáneamente `CTRL/CMD+`⏎ (`CTRL` en Windows; `CMD` en Mac).
 
-O se puede seleccionar todo un grupo de líneas de código que se quiere ejecutar y se pulsan a la vez `CTRL/CMD+`⏎.
+O se puede seleccionar todo el grupo de líneas de código que se quieren ejecutar y se pulsan, a la vez, `CTRL/CMD+`⏎.
 
-También se puede utilizar, el boton `Run` que hay en la parte superior derecha del editor. Tanto para ejecutar una sola línea de código como todo un bloque (véase la siguiente imagen).
+También se puede utilizar el boton `Run` que hay en la parte superior derecha del editor. Tanto para ejecutar una sola línea de código como todo un bloque (véase la siguiente imagen).
 
 ```{r rstudio13, echo=F, fig.cap="", message=FALSE, warning=FALSE, fig.align="center", out.width='50%'}
 knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/Taller-UVa/master/images/UVa_005.png")
@@ -172,17 +173,17 @@ knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/Tall
 
 # Comenzamos con R{-}
 
-Esta sección introduce algunos conceptos y procedimientos básicos que te ayudarán a optimiar el flujo de trabajo en R. 
+Esta sección introduce algunos conceptos y procedimientos básicos que te ayudarán a optimizar el flujo de trabajo en R. 
 
 ## Preparando una sesión de R{-}
 
 Al comienzo de una sesión de trabajo, es bueno definir una serie de parámetros básicos. No es obligatorio, ni siquiera necesario, pero puede ser útil a lo largo del trabajo. En la preparación de una sesión de trabajo se pueden establecer una serie de opciones. En nuestro caso
 
-+ queremos que R imprima los números con decimales (y no que los presenten con notación científica, es decir, queremos ver 0.007 y no 0.7e^-3^))
++ queremos que R imprima los números como estamos acostumbrados (que no los presenten con notación científica, es decir, queremos ver 0.007 y no 0.7e^-3^, o 1000000 y no 1e^6^))
 
-+ quremos que R muestre un máximo de 100 resultados (si no lo hacemos, es posible que R se pase un buen rato imprimendo ristras y ristras de números).
++ queremos que R muestre un máximo de 100 resultados (si no lo haces, es posible que R se pase un buen rato imprimendo ristras y ristras de números o palabras).
 
-De nuevo, estos preparativos de sesión no son obligatorios ni necesarios, pero pueden ayudar a evitar errores.
+De nuevo, estos preparativos de sesión no son obligatorios ni necesarios, pero pueden ayudar a evitar errores (ya lo verás más abajo).
 
 <div class="warning" style='padding:0.1em; background-color:#9b59b6; color:#f2f2f2'>
 <span>
@@ -191,8 +192,7 @@ De nuevo, estos preparativos de sesión no son obligatorios ni necesarios, pero 
 <p style='margin-left:1em;'>
 </p></span>
 </div>
-
-
+<br>
 ```{r, message=F, warning=F}
 # establece opciones
 options(stringsAsFactors = F)                    
@@ -203,13 +203,13 @@ options(max.print=100)
 
 ## Packages{-}
 
-Al usar R, la mayoría de la funciones no están cargadas; es más, ni siquiera están instaladas. La gran mayoría de las funciones en encuentran en lo que se llaman **packages** o **librerías**. 
+Al usar R, la mayoría de la funciones no están disponibles; es más, ni siquiera están instaladas en tu ordenador. La gran mayoría se encuentran en lo que se llaman **packages** o **librerías**. 
 
-Lo que has instalado de R es lo básico ("base R"), trae consigo unas 30 librerías. Pero existen más de 10,000 librarías creadas y mantenidas por usuarios de todo el mundo; puedes saber  de ellos y cómo utilizarlos en la red.  Hay un conjuntos de librerías que es básicos, pero que no está incluido en el _base R_. Se trata de `tidyverse`, que incluye `ggplot2`, una librería para trazar magníficos gráficos.
+Lo que has instalado de R es lo más básico ("base R"), trae consigo unas 30 librerías. Pero existen más de 10.000 librarías creadas y mantenidas por usuarios de todo el mundo; puedes saber de ellos y cómo utilizarlas en la red. En cualquier caso, hay un conjunto de librerías que es básico, pero que no está incluido en el _base R_. Se trata de `tidyverse`, que incluye `ggplot2`, una librería para dibujar magníficos gráficos y mapas.
 
-Antes de poder usar una librería, hay que instalarla en el ordenador (con la función `install.packages`) y cargar en cada sesión de trabajo (con la función `library`) en la que se quiera utilizar. Sin embargo, una librería (o paquete) solo se ha de instalar una vez, y una vez instado solo hay que cargarlo en la sesión de trabajo en la que sea necesario. Cuando se instala un paquete, es posible que se instalen otros varios que le son impresicindibles para funcionar adecuadamente. Cuando vengas al taller, debes tener instalado `tidyverse`, `tidytext`, `quanteda` and `tm`, de esta manera ahorraremos timepo y problemas.
+Antes de poder usar una librería, hay que instalarla en el ordenador (con la función `install.packages()`) y cargar en cada sesión de trabajo (con la función `library()`) en la que se quiera utilizar. Sin embargo, una librería (o paquete) solo se ha de instalar una vez, y una vez instado solo hay que cargarlo en la sesión de trabajo en la que sea necesario. Cuando se instala un paquete, es posible que se instalen otros varios que le son impresicindibles para funcionar adecuadamente. Cuando vengas al taller, debes tener instalado `tidyverse`, `tidytext`, `quanteda` y `tm`, de esta manera ahorraremos tiempo y problemas.
 
-Recuerda que has de cargar las librerías en todas aquellas sesiones de R en las que las quieras utilizar. A continuación te muestro qué has de hacer para instalar las librería `tidyverse`,  `tidytext`,  `quanteda` y `stopwords` (que son las que vamos a necesitar a lo largo de este taller).
+Recuerda que has de cargar las librerías en todas aquellas sesiones de R en las que las quieras utilizar. A continuación te muestro qué has de hacer para instalar las librerías `tidyverse`,  `tidytext`,  `quanteda` y `stopwords` (que son las que vamos a necesitar a lo largo de este taller). Corta y pega estas líneas de código en el editor de RStudio y ejecútalas (más atrás te conté cómo se hace).
 
 ```{r, echo=T, eval=F, message=F, warning=F}
 install.packages("tidyverse")
@@ -218,7 +218,15 @@ install.packages("quanteda")
 install.packages("stopwords")
 ```
 
-Para cargar los paquetes que has intalado, utiliza la función `library`, cuyo argumento, que se encierra entre los paréntesis, es el nombre de la librería.
+Se estará un buen rato, depende de tu conexión a internet, mostrándote un motón de información en la consola.
+
+
+```{r echo=F, fig.cap="Al instalar la librería stylo —que no nececistas por ahora— instaló seis librarías más que necesita. Al final informa de que todo ha ido bien", message=FALSE, warning=FALSE, fig.align="center", out.width='75%'}
+knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/Taller-UVa/master/images/UVa_013.png")
+``` 
+
+
+Para cargar los paquetes que has instalado, utiliza la función `library`, cuyo argumento, que se encierra entre los paréntesis, es el nombre de la librería.
 
 ```{r message=FALSE, warning=FALSE}
 library(tidyverse)
