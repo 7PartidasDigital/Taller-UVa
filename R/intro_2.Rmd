@@ -10,22 +10,24 @@ output:
 <div>
 <center>
 <img src="https://fyl.uva.es/wp-content/uploads/2020/07/fyluva-logo.png" width="350"/>
-<center>
+</center>
 </div>
 
 
 # Introducción
 
-Este documentos contiene los materiales para el taller *R para los de Letras* ofrecido por la [Facultad de Filosofía y Letras](https://fyl.uva.es/) de la [Universidad de Valladolid](https://www.uva.es/export/sites/uva/).
+Este documento contiene los instrucciones para el taller *R para los de Letras* ofrecido por la [Facultad de Filosofía y Letras](https://fyl.uva.es/) de la [Universidad de Valladolid](https://www.uva.es/export/sites/uva/).
 
-Este tutorial muestra cómo iniciarse con R. Se centra en el uso de R para analizar datos textuales, pero ofrece información valiosa para cualquiera que quiera introducirse en R. Como tal, este tutorial está dirigido a principiantes con el objetivo de mostrar cómo configurar una sesión de R en RStudio, cómo configurar proyectos en R y cómo realizar operaciones básicas usando R.
+El objetivo de este taller es introducirse en el uso de R como herramienta para analizar datos textuales, pero ofrece información valiosa para cualquiera que quiera introducirse en R. 
+
+Este taller está dirigido a principiantes con el objetivo de mostrar cómo configurar una sesión de R en RStudio, cómo configurar proyectos en R y cómo realizar operaciones básicas usando R.
 
 ## Los objetivos de este taller{-}
 
 Los objetivos de este taller son:
 
 - Instalar R 
-- Cómo moverte en R y RStudio
+- Cómo moverse en R y RStudio
 - Cómo crear y trabajar con proyectos en R
 - Dónde buscar ayuda y aprender más acerca de R
 - Comprender los principios básicos al trabajar con datos: cargarlos, guardarlos, trabajar con tablas, crear un gráfico sencillo
@@ -35,7 +37,7 @@ Los objetivos de este taller son:
 
 Este taller es para principiantes. No es necesario saber nada de R, ni de lenguas de programación.
 
-Se ruega que todos los participantes traigan su propio ordenador y con el software ya instalado. Al usar su propio ordenador, nos aseguramos de que tras el taller podrás continuar usando lo que se ha aprendido una vez haya finalizado el taller.
+Se ruega que todos los participantes traigan su propio ordenador con el software ya instalado. Al usar su propio ordenador, nos aseguramos de que tras el taller podrán continuar usando lo que se ha aprendido una vez haya finalizado el taller.
 
 
 ## Instalar R y RStudio{-}
@@ -44,6 +46,11 @@ Durante el taller, se usará RSudio. RStudio es un exelente manera de manejar el
 
 Por favor, sigue las instrucciones que hay a continuación para instalar R y RStudio y hazlo antes de acudir al taller. Asegúrate de que el software funciona que debe una vez instalado. ¡Te diremos cómo hacerlo!
 
+<div>
+<center>
+<img src="https://cdn-dynmedia-1.microsoft.com/is/image/microsoftcorp/UHFbanner-MSlogo?fmt=png-alpha&bfc=off&qlt=100,1"/>
+</center>
+</div>
 
   + Tiene un ordenador con Windows?
   
@@ -52,6 +59,12 @@ Por favor, sigue las instrucciones que hay a continuación para instalar R y RSt
     - Ahora descarga RStudio. [Este enlace lo descargará](https://download1.rstudio.org/electron/windows/RStudio-2024.12.0-467.exe)
     - Cuando se haya descargado, ejecuta el fichero `.exe` que acaba de bajar (estará en la carpeta `Descargas`), y sigue las instrucciones
     - Una vez que se haya finalizado la instalación, abre Rstudio y asegúrate de que funciona y de que no haya mensajes de error.
+
+<div>
+<center>
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/MacOS_logo.svg/240px-MacOS_logo.svg.png" width="70px"/>
+</center>
+</div>
 
   + Tienes un Mac? 
 
@@ -255,7 +268,7 @@ One great thing about R is that you can very often find an answer to your questi
 <div>
 <center>
 <img src="https://raw.githubusercontent.com/7PartidasDigital/MLex/master/image/R_google.png" width="500"/>
-<center>
+</center>
 </div>
 
 <div class="warning" style='padding:0.1em; background-color:#804000; color:#f2f2f2'>
