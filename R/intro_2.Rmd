@@ -57,8 +57,8 @@ Por favor, sigue las instrucciones que hay a continuación para instalar R y RSt
     - Descarga R. [Este enlace lo desacargará](https://cran.rediris.es/bin/windows/base/R-4.4.2-win.exe)
     - Ejecuta el fichero `.exe` que acabas de descargar (se encuentra en la carpeta `Descargas`), y sigue sus instrucciones
     - Ahora descarga RStudio. [Este enlace lo descargará](https://download1.rstudio.org/electron/windows/RStudio-2024.12.0-467.exe)
-    - Cuando se haya descargado, ejecuta el fichero `.exe` que acaba de bajar (estará en la carpeta `Descargas`), y sigue las instrucciones
-    - Una vez que se haya finalizado la instalación, abre Rstudio y asegúrate de que funciona y de que no haya mensajes de error.
+    - Cuando se haya descargado, ejecuta el fichero `R-4.4.2-win.exe` (estará en la carpeta `Descargas`), y sigue las instrucciones
+    - Una vez haya finalizado la instalación, abre Rstudio y asegúrate de que funciona y de que no hay mensajes de error.
 
 <div>
 <center>
@@ -68,66 +68,66 @@ Por favor, sigue las instrucciones que hay a continuación para instalar R y RSt
 
   + Tienes un Mac? 
 
-    - Desargar R. Si tienes un ordenador con los chips M1/M2/M3/M4  [usa este enlace](https://cran.rediris.es/bin/macosx/big-sur-arm64/base/R-4.4.2-arm64.pkg), pero si tu ordenador tiene un procesador Intel entonces [usa este otro enlace](https://cran.rediris.es/bin/macosx/big-sur-x86_64/base/R-4.4.2-x86_64.pkg)
-    - Ejecuta el fichero `.pkg` que acabas de ejecutar (estará en la carpeta `Descargas`), y sigue las instrucciones
+    - Desarga R. Si tienes un ordenador con los chips M1/M2/M3/M4 [usa este enlace](https://cran.rediris.es/bin/macosx/big-sur-arm64/base/R-4.4.2-arm64.pkg), pero si tu ordenador tiene un procesador Intel, entonces [usa este otro enlace](https://cran.rediris.es/bin/macosx/big-sur-x86_64/base/R-4.4.2-x86_64.pkg)
+    - Ejecuta el fichero `.pkg` que acaba de bajar (estará en la carpeta `Descargas`), y sigue las instrucciones
     - Ahora descarga RStudio. [Este enlace lo descargará](https://download1.rstudio.org/electron/macos/RStudio-2024.12.0-467.dmg)
-    - Cuando se haya descargado, ejecuta el fichero `.dmg` que acaba de bajar (estará en la carpeta `Descargas`), y sigue las instrucciones
+    - Cuando se haya descargado, ejecuta el fichero `R-4.4.2-arm64.pkg` o `R-4.4.2-x86_64.pkg` (estará en la carpeta `Descargas`), y sigue las instrucciones
     - Una vez que se haya finalizado la instalación, abre Rstudio y asegúrate de que funciona y de que no haya mensajes de error.
     
-Cuando arranques RStudio, verás que se parece a esta imagen (las tres primeras líneas serán diferentes, pues dependen del tipo de ordenador y de la versión de R):
+Cuando arranques RStudio, verás que se parece a esta imagen (el fondo será blanco y no negro):
 
-```{r mlex01, echo=F, fig.cap="", message=FALSE, warning=FALSE, out.width='100%'}
-knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/MLex/master/image/MLex_001.png")
+```{r mlex01, echo=F, fig.cap="", message=FALSE, warning=FALSE, out.width='100%', fig.align="center"}
+knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/Taller-UVa/master/images/UVa_001.png")
 ``` 
 
 # R y RStudio. Lo básico{-}
 
-RStudio is an IDE - Integrated Development Environment. The interface provides easy access to R. The advantage of this application is that R programs and files as well as a project directory can be managed easily. The environment is capable of editing and running program code, viewing outputs and rendering graphics. Furthermore, it is possible to view variables and data objects of an R-script directly in the interface. 
+RStudio es un IDE - Integrated Development Environment, una especie de escritorio que facilita el acceso a R. La gran ventaja es de este aplicativo es que se pueden gestionar con gran facilidad los _scripts_ de R, los ficheros y los directorios de los proyectos. Este entorno de trabajo permite editar y ejecutar el código (_scripts_), ver los resultados y los gráficos que trace. Es más, se pueden ver las variables y los objetos que se están ejecutando en la ventana `Environment`(más, más abajo 👇).
 
 ## RStudio: Paneles{-}
 
-The GUI - Graphical User Interface - that RStudio provides divides the screen into four areas that are called **panes**:
+El escritorio de RStudio divide la pantalla en cuatro ventanas que llama **panes** (o **paneles**):
 
-1. File editor
-2. Environment variables
-3. R console
-4. Management panes (File browser, plots, help display and R packages).
+1. Editor de ficheros
+2. Environment
+3. Console
+4. Gestion (Gestor de ficheros (_Files_), Gráfico (_plots_), Ayuda (_help_), Visor (_Viewer), Presentación (_Presentation_) y Librarías (_packages_).
 
-The two most important are the R console (bottom left) and the File editor (or Script in the top left).
-The Environment variables and Management panes are on the right of the screen and they have several tabs: 
+Los dos más importante son la Consola (parte inferior, abajo) y el editor de ficheros (parte superior, izquierda).
+Los paneles de variables gestión están en la parte de derecha y tienen varias pestañas: 
 
-* **Environment** (top): Lists all currently defined objects and data sets
-* **History** (top): Lists all commands recently used or associated with a project
-* **Plots** (bottom): Graphical output goes here
-* **Help** (bottom): Find help for R packages and functions.  Don't forget you can type `?` before a function name in the console to get info in the Help section. 
-* **Files** (bottom): Shows the files available to you in your working directory
+* **Environment** (arriba): Presenta todos los objetos, variables, y conjunto de datos (_data sets_) que se están usando.
+* **History** (arriba): Recoge todas las instrucciones ejecutadas rencientemente o que están asociadasa un proyecto determinado
+* **Plots** (abajo): Cualquier gráfico se imprimirá en ese espacio
+* **Help** (abajo): es donde buscar la ayuda la cualquier librería o función. Si escribes `?` y el nombre de una función en la consola, la ayuda aparecerá en la ventana **Help**. 
+* **Files** (abajo): Muesrtra los ficheros que hay en el directorio de trabajo, y tienes varias posibilidades (crear nuevos directorios o carpetas (_New Folder_), crear un nuevo fichero (_New File_), borrarlo (_Delete_), renombrarlo (_Rename_) y otras varias posibilidades en ⚙️ _More_)
 
-### R Console (bottom left pane){-}
+### Consola de R (panel, ventana inferior izquierdo){-}
 
-The console pane allows you to quickly and immediately execute R code. You can experiment with functions here, or quickly print data for viewing. 
-
-Type next to the `>` and press `Enter` to execute. 
+La consola permite ejecutar inemdiatamente cualquier función o instrucción de R. Aquí puedes experimentar con las funciones, o, sencillamente, imprimir los datos para verlos.
+ 
+Para usarlo hay que escribir la orden tras `>` y pulsar ⏎ para ejecutar la orden que se quiera que realice R.
 
 ***
 
 <div class="warning" style='padding:0.1em; background-color:#00802B; color:#f2f2f2'>
 <span>
 <p style='margin-top:1em; text-align:center'>
-<b>EXERCISE TIME!</b></p>
+<b>PRIMER EJERCICIO</b></p>
 <p style='margin-left:1em;'>
 </p></span>
 </div>
 
 <div class="question">` 
 
-1. You can use R like a calculator.  Try typing `2+8` into the **R console**, as is the following image.
+1. Puedes utilizar R como una sencilla calculadora. Escribe `2+8` en la **consola**, como te muestro en la imagen que hay a continuación, y pulsa ⏎.
 
-```{r echo=F, fig.cap="", message=FALSE, warning=FALSE, out.width='10%'}
-knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/MLex/master/image/MLex_002.png")
+```{r echo=F, fig.cap="", message=FALSE, warning=FALSE, out.width='75%', fig.align="center"}
+knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/Taller-UVa/master/images/UVa_002.png")
 ```
 
 <details>
-  <summary>Answer</summary>
+  <summary>Respuesta</summary>
 
 ```{r calculator, echo=FALSE}
   2+8
@@ -137,67 +137,76 @@ knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/MLex
 
 ***
 
-Here, the plus sign is the **operator**.  Operators are symbols that represent some sort of action.  However, R is, of course, much more than a simple calculator.  To use R more fully, we need to understand **objects**, **functions**, and **indexing** (the number between square brackets)- which you will learn about as we go.
+En esta orden, el signo de adición `+` es el **operador**. Los operadores son símbolos que representan algún tipo de acción. R, sin embargo, es muchísima más que una sencilla calculadora. Para poderle sacar el máximo partido es necesario comprender que son los **objetos**, las **funciones** y los **índices** (el número que aparece entre corchetes en los resultados que se imprimen en la consola). Aprenderás cómo usarlos según avanzamos.
 
-For now, think of *objects as nouns* and *functions as verbs*. 
+Por ahora, considera que los *objetos* son *nombres* y que las *funciones* son *verbos*. 
 
-## Script Editor pane (top left pane){-}
+## El editor de _scripts_ (arriba a la izquierda){-}
 
-The Editor pane only opens if prompted. It is very flexible since it allows you to go back and forth, highlights the various components of an expression in colors, allows you to save a script to reuse it and correct errors without having to rewrite everything. The way to open it is very simple click on `File`
+La ventana del editor solo se abre si se le dice que se abra. es muy flexible puesto que permite moverte por el texto de un _script_, y coloreará los diversos componentes de una expresión (u orden o comando). Te permite guardar el _script_, reutilizarlo o corregir los errores sin tener que reescribir todo. La manera de abrir el editor es haciendo clic en `File`
 
-```{r mlex02, echo=F, fig.cap="", message=FALSE, warning=FALSE, out.width='10%'}
-knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/MLex/master/image/MLex_003.png")
+
+```{r mlex02, echo=F, fig.cap="", message=FALSE, warning=FALSE, fig.align="center", out.width='75%'}
+knitr::include_graphics('https://raw.githubusercontent.com/7PartidasDigital/Taller-UVa/master/images/UVa_003.png')
 ``` 
 
-Click on `New File` and then on `R Script` as shown below.
+Ahora haz clic en `New File` y, por último, en `R Script`, como te muestro en la siguiente imagen.
 
-```{r rstudio12, echo=F, fig.cap="", message=FALSE, warning=FALSE, out.width='10%'}
-knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/MLex/master/image/MLex_004.png")
+```{r rstudio12, echo=F, fig.cap="", message=FALSE, warning=FALSE, fig.align="center", out.width='75%'}
+knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/Taller-UVa/master/images/UVa_004.png")
 ```
 
-This `R Script` will be the file in which you do all your work.
+Este `R Script` es donde harás todo el trabajo de programación.
 
-## Running commands from a script{-}
+## Ejecutar un `script`{-}
 
-In contrast to the R console, which quickly runs code, the Script Editor (in the top left) does not automatically execute code. To run code from a script, insert your cursor on a line with a command, and press `CTRL/CMD+Enter`.
+Al contrario que la consola que viste antes, que ejecuta el código inmediatamente, el editor no lo hace tan pronto como se pulsa ⏎. Para conseguirlo, hay que situar el cursor en la primera línea de un comando del _script_, y pulsar simultáneamente `CTRL/CMD+`⏎ (`CTRL` en Windows; `CMD` en Mac).
 
-Or highlight some code to only run certain sections of the command, then press `CTRL/CMD+Enter` to run.
+O se puede seleccionar todo un grupo de líneas de código que se quiere ejecutar y se pulsan a la vez `CTRL/CMD+`⏎.
 
-Alternatively, use the `Run` button at the top of the pane to execute the current line or selection (see below).
+También se puede utilizar, el boton `Run` que hay en la parte superior derecha del editor. Tanto para ejecutar una sola línea de código como todo un bloque (véase la siguiente imagen).
 
-```{r rstudio13, echo=F, fig.cap="", message=FALSE, warning=FALSE, out.width='10%'}
-knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/MLex/master/image/MLex_005.png")
+```{r rstudio13, echo=F, fig.cap="", message=FALSE, warning=FALSE, fig.align="center", out.width='50%'}
+knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/Taller-UVa/master/images/UVa_005.png")
 ```
 
-# Getting started with R{-}
+# Comenzamos con R{-}
 
-This section introduces some basic concepts and procedures that help optimize your workflow in R. 
+Esta sección introduce algunos conceptos y procedimientos básicos que te ayudarán a optimiar el flujo de trabajo en R. 
 
-## Setting up an R session{-}
+## Preparando una sesión de R{-}
 
-At the beginning of a session, it is common practice to define some basic parameters. This is not required or even necessary, but it may just help further down the line. This session preparation may include specifying options. In the present case, we 
+Al comienzo de una sesión de trabajo, es bueno definir una serie de parámetros básicos. No es obligatorio, ni siquiera necesario, pero puede ser útil a lo largo del trabajo. En la preparación de una sesión de trabajo se pueden establecer una serie de opciones. En nuestro caso
 
-+ want R to show numbers as numbers up to 100 decimal points (and not show them in mathematical notation (in mathematical notation, 0.007 would be represented as 0.7e^-3^))
++ queremos que R imprima los números con decimales (y no que los presenten con notación científica, es decir, queremos ver 0.007 y no 0.7e^-3^))
 
-+ want R to show maximally 100 results (otherwise, it can happen that R prints out pages-after-pages of some numbers).
++ quremos que R muestre un máximo de 100 resultados (si no lo hacemos, es posible que R se pase un buen rato imprimendo ristras y ristras de números).
 
-Again, the session preparation is not required or necessary but it can help avoid errors.
+De nuevo, estos preparativos de sesión no son obligatorios ni necesarios, pero pueden ayudar a evitar errores.
 
-<div class="warning" style='padding:0.1em; background-color:#51247a; color:#f2f2f2'>
+<div class="warning" style='padding:0.1em; background-color:#9b59b6; color:#f2f2f2'>
 <span>
 <p style='margin-top:1em; text-align:center'>
-<b>WARNING</b><br>Whenever you see a grey box as the one below, select and cut the text within it, and the paste it into RStudio editor pane.<br></p>
+<b>ATENCIÓN</b><br>Siempre que veas una caja gris como la que hay a continiación, selecciona lo que haya en ella, córtalo y pégalo en el editor de RStudio.<br></p>
 <p style='margin-left:1em;'>
 </p></span>
 </div>
 
 
 ```{r, message=F, warning=F}
-# set options
-options(stringsAsFactors = F)                           
-options(scipen = 100) 
-options(max.print=100) 
+# establece opciones
+options(stringsAsFactors = F)                    
+options(scipen = 999) # establece que utilice la notación científica
+options(max.print=100)
 ```
+
+<div class="warning" style='padding:0.1em; background-color:#239b56; color:#f2f2f2'>
+<span>
+<p style='margin-top:1em; text-align:center'>
+<b>NOTA</b><br>La primera línea del bloque anterior, que comienza con `#`, es un comentario y no se ejecutará, aunque fuera un línea de código.<br>También lo he puesto en la segunda `option`, lo que hace es indicar o recordar qué es lo que hace esa línea de código.<br>Es una práctica excelente comentar los _scripts_.</p>
+<p style='margin-left:1em;'>
+</p></span>
+</div>
 
 ## Packages{-}
 
@@ -263,7 +272,7 @@ There are also other "official" help resources from R/RStudio.
 
 ### Finding help online{-}
 
-One great thing about R is that you can very often find an answer to your question online. [R-bloggers](https://www.r-bloggers.com/) and [Stackoverflow](https://stackoverflow.com/questions/tagged/r) are great places to find tips and help.
+Una de las mejores cosas de R es que puedes encontrar la solución a tus preguntas y problemas en la red. [R-bloggers](https://www.r-bloggers.com/) y [Stackoverflow](https://stackoverflow.com/questions/tagged/r) son sitios magníficos para localizar trucos y ayuda.
 
 <div>
 <center>
@@ -271,11 +280,18 @@ One great thing about R is that you can very often find an answer to your questi
 </center>
 </div>
 
+Desde el aparición de la IA generativa del tipo ChatGPT o Copilot, se puede recurrir a ella para que te ayude a solucionar un problema en un _script_. Al reescibir partes del código de este taller, recuperé un _script_ que me dio un error y no sabía cuál era. había escrito el código hace dos o tres años y no lo documenté adecuadamente con `#`. Copilot en segundos me dijo donde estaba el error. ¡Había olvidado cargar una librería!
+
+```{r echo=F, fig.cap="", message=FALSE, warning=FALSE, fig.align="center", out.width='50%'}
+knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/Taller-UVa/master/images/UVa_012.png")
+``` 
+
+
 <div class="warning" style='padding:0.1em; background-color:#804000; color:#f2f2f2'>
 <span>
 <p style='margin-top:1em; text-align:center'>
 <b>NOTE</b>
-<br>This R Notebook is based on some [Ladal](https://ladal.edu.au/tutorials.html), [Programming Historian](https://programminghistorian.org/en/lessons/basic-text-processing-in-r) and [CuentaPalabras](http://www.aic.uva.es/cuentapalabras/) tutorials.<br>For linguistics I highly recommend Ladal tutorials.</p>
+<br>Este `R Notebook` en tutoriales de [Ladal](https://ladal.edu.au/tutorials.html), [Programming Historian](https://programminghistorian.org/en/lessons/basic-text-processing-in-r) y [CuentaPalabras](http://www.aic.uva.es/cuentapalabras/).<br>Para los interesados en la lingüistica recomiendo vivamente los tutoriales de **Ladal**.</p>
 <p style='margin-left:1em;'>
 </p></span>
 </div>
