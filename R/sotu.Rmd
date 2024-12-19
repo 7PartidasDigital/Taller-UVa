@@ -1,0 +1,539 @@
+---
+title: "A hands-on in R for Humanists: Working with texts"
+author: "J. M. Fradejas"
+date: "2023.09.21"
+output: html_notebook
+---
+<div>
+<center>
+<img src="https://raw.githubusercontent.com/7PartidasDigital/MLex/master/image/MLex-logo.png" width="250"/>
+<center>
+</div>
+
+
+# Introduction
+
+In the previous NoteBook we learnt to install R, RStudio and the libraries that we will use in the rest of the session. Then we also indicated that whenever you see a gray box with code inside it (as de box below), you have to select it, cut it, and paste it into the RStudio editor pane and to run it with CMD/CONTROL + ENTER or by clicking the Run icon on the rigth top margin of the editor pane. 
+
+Let’s start by setting the basic parameters for this session.
+
+```{r, message=F, warning=F}
+# set options
+options(stringsAsFactors = F)                           
+options(scipen = 100) 
+options(max.print=100) 
+```
+
+and loading all the libraries that we are going to use.
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(tidytext)
+library(quanteda)
+library(stopwords)
+```
+
+
+# Working with texts{-}
+
+Although R was created to do statistical analysis and visualize data, it also serves to handle textual data that we can convert into statistical data and visualize them.
+
+
+## Loading text data{-}
+
+A classical corpus to teach the basics of text handling with R are the State of the Union Address (SOTU), an annual message delivered, since 1790, by the President of the United States to a joint session of the United States Congress. We will be using it.
+
+All SOTU messages are accesible in the internet, from several sources, I have gathered them and made some cleaning and the are available in a GitHub repository. To load them we can use the `read_Lines` which takes the file name of the text as its first argument (in this case is an internet URL). Let's mine, for a while the 2022 speech.
+
+The very first thing is to load it in R into an object named `last_sotu`.
+
+```{r, message=FALSE, warning=FALSE}
+last_sotu <- read_lines(url("https://raw.githubusercontent.com/7PartidasDigital/MLex/master/sotu/242.txt"))
+
+# inspect data (will show the very first words of the file.)
+
+str(last_sotu)
+```
+
+Once it is contained in an object, it is very easy to extract frequency information and to create frequency lists. We can do this by first using the `unnest_tokens` function which splits texts into individual words (tokens), and then use the `count` function to get the raw frequencies of all word types in a text.
+
+In the first place, we are transforming the long text into a kind of table with the `tibble` function. It will make text wrangling easier.
+
+```{r, message=FALSE, warning=FALSE}
+tidy_sotu <- tibble(text = last_sotu)
+
+# inspect data (10 first entries)
+
+tidy_sotu
+```
+
+Each line of this table corresponds to a paragraph of the speech, that is, it includes all the text that is before each tap of the `return` or `enter` key. Now we can split it into tokens.
+
+Every time you see a table like the one above, you can go through it by tapping the `Next` label in the lower left of the table.
+
+```{r, message=FALSE, warning=FALSE}
+tidy_words <- tidy_sotu %>%
+  unnest_tokens(word, text) %>%
+  count(word, sort=T)
+
+# inspect data (10 first entries)
+
+tidy_words
+```
+
+We have told R to split the text in `tidy_sotu`, divide it into words, count them and order them in decreasing frequency and store it in an object named `tidy_words`.
+
+As easy as dividing the texto into tokens, is to extract N-grams, that is, sequences of n consecutive words. That's so because the `unnest_tokens` function have an argument called `token` in which we can specify that we want to extract `ngrams`. If we do this, then we need to specify the `n` (the number of words) as a separate argument. Below we specify that we want the frequencies of all 4-grams, 
+
+```{r, message=FALSE, warning=FALSE}
+tidy_sotu %>%
+  unnest_tokens(word, text, token = "ngrams", n = 4) %>%
+  drop_na() %>%
+  count(word, sort=T)
+```
+
+It is also possible to split a text into sentences rather than words. It is easy because the argument `tokens` from  `unnest_tokens` function can take the value `sentences`.
+
+```{r message=FALSE, warning=FALSE}
+tidy_sotu %>%
+  unnest_tokens(sentences,
+                text,
+                token = "sentences")
+```
+
+In the 2022 Biden's speech there are `6553` words. It can easily calculated by adding all the `n` values of the `tidy_words` object by means of the function `sum`.
+
+```{r, message=FALSE, warning=FALSE}
+sum(tidy_words$n)
+```
+
+
+## Stopwords{-}
+
+When we divided the speech into tokens, we saw that extremely common words such as “the”, “to”, “and”, “of”, and “we” float to the top of the table. These words are not particularly insightful for determining the content of the speech (for other kinds of text mining and linguistic analysis they are precious!). We can remove them.
+
+```{r, message=FALSE, warning=FALSE}
+data(stop_words)
+tidy_words %>%
+  anti_join(stop_words)
+```
+
+However, still there are some very common words, or contractions, as “let's”, “let's”, “that's”, and “it's”. We might want to find the words that are represented much more often in this text than over a large external corpus of English. To accomplish this we need a dataset giving these frequencies. A good one is the [Peter Norvig's](https://www.kaggle.com/datasets/rtatman/english-word-frequency) using the Google Web Trillion Word Corpus, collected from data gathered via Google’s crawling of known English websites.
+
+```{r, message=FALSE, warning=FALSE}
+word_frequencies <- read_csv("https://raw.githubusercontent.com/programminghistorian/jekyll/gh-pages/assets/basic-text-processing-in-r/word_frequency.csv")
+head(word_frequencies)
+```
+
+The first column lists the language (always “en” for English in this case), the second gives the word and the third the percentage of the Trillion Word Corpus consisting of the given word.
+
+To combine these overall word frequencies with the table constructed from 2022 Biden's State of the Union speech, we can utilize the `inner_join` function. This function takes two data sets and combines them on all commonly named columns; in this case the common column is the one named `word`.
+
+```{r, message=FALSE, warning=FALSE}
+tidy_words %>%
+  inner_join(word_frequencies) %>%
+  filter(frequency < 0.1)
+```
+
+This list is starting to look a bit more interesting. Terms such as “america”, “american(s)”, “year”, “people”, and “world” float to the top and we might speculate that they are used a lot in speeches by politicians, specially in their annual addresses, but relatively less so in other domains. Setting the threshold even lower, to 0.002, gives an even better summary of the speech.
+
+```{r, message=FALSE, warning=FALSE}
+tidy_words %>%
+  inner_join(word_frequencies) %>%
+  filter(frequency < 0.002)
+```
+
+If you tap in the `Next` tag of the table above, you will see quite a few interesting terms as “putin”, “ukrainian”, “allies”, “pandemic”, “deficit”, and “inflation” that seem to suggest some of the key themes of the speech.
+
+Before getting into deeper waters, we will make a brief summary, of the five most used words, in speech we have been exploring. To do it, we need a table with some metadata to fully identify every speech. This table holds the name of the President, year of the SOTU address, years in office (somehow irrelevant), political party, and type of address as the could be written or spoken (speech). So let us load into the computer.
+
+```{r, message=FALSE, warning=FALSE}
+sotu_meta <- read_tsv("https://raw.githubusercontent.com/7PartidasDigital/MLex/master/sotu_meta.txt")
+# Inspect the data
+sotu_meta
+```
+
+Now it is time to summarize it in just one line. At the end of the instruction you have a `5`, it means that it will select the five most used words, but it can be increased to any number (a summary over 10 will not be very informative)
+
+```{r, message=FALSE, warning=FALSE, error = FALSE}
+address_summary <- tidy_words %>%
+  inner_join(word_frequencies) %>%
+  filter(frequency < 0.002)
+result <- c(sotu_meta$president[242], sotu_meta$year[242], address_summary$word[1:5])
+paste(result, collapse = "; ")
+```
+
+## Concordancing and KWICs{-}
+
+Creating concordances or key-word-in-context (KWIC) displays is one of the most common practices when dealing with text data. Fortunately, there exist ready-made functions that make this a very easy task in R. We will use the `kwic` function from the `quanteda` package to create kwics here. 
+
+```{r, message=FALSE, warning=FALSE}
+kwic_multiple <- kwic(last_sotu, 
+       pattern = "Ukraine",
+       window = 3) %>%
+  as.data.frame()
+# inspect data
+head(kwic_multiple)
+```
+
+# Analyzing Every State of the Union Address from 1790 to 2023
+
+The first step in analyzing the entire State of the Union Addresses corpus is to read all of the addresses into R together. This involves to use the `readLines` function as before, we will `paste` together all paragraphs of every speech, add an identification system to know which speech is which speech. And we have to put all this within a loop because it has to do it 243 and store it in just one table: `all_sotu`.
+
+As the files are in the web, the very first step is to declare the full url for every speech and an empty table (`all_sotu`) to hold all the texts. The instruction to create the file names is a two steps process. Firstly we will store the invariable part of the URL in `base_url`. An secondly, to create the file names, that are made up of a number between `1` and `243`, we will use the `sprintf` function, that allows a formula to add the numbers, with leading zeros, from `001` … `099`… `243`, to the file extension `.txt` and glue it the invariable part of the url. 
+
+```{r, message=FALSE, warning=FALSE}
+base_url <- "https://raw.githubusercontent.com/7PartidasDigital/MLex/master"
+files <- sprintf("%s/sotu/%03d.txt", base_url, 1:243)
+all_sotu <- NULL
+```
+
+You may be wondering how the urls have turned out. Let's us cheks the six first with the `head` function.
+
+```{r, message=FALSE, warning=FALSE}
+head(files)
+```
+
+and the last six with the and `tail` function.
+
+
+```{r, message=FALSE, warning=FALSE}
+tail(files)
+```
+
+Now we can read them all into a table (it will take a bit)
+
+```{r, message=FALSE, warning=FALSE}
+for (i in 1:length(files)) {
+  sotu <- readLines(files[i])
+  sotu <- paste(sotu, collapse = "\n")
+  temporary <- tibble(speech = i,
+                      text = sotu)
+  all_sotu <- bind_rows(all_sotu, temporary)
+}
+```
+
+And will attach to it the metadata stored in `sotu_meta`:
+
+```{r, message=FALSE, warning=FALSE}
+all_sotu <- full_join(all_sotu, sotu_meta, by="speech")
+```
+
+
+## Exploratory Analysis
+
+Now we have all the elements we need to analyze all SOTU speeches. Let's begin by split them into tokens. The already seen `unnest_tokens` function will do it in secs.
+
+```{r, message=FALSE, warning=FALSE}
+all_words <- all_sotu %>%
+  unnest_tokens(word, text)
+all_words
+```
+
+He have at the tip of our fingers a corpus of a little over 2M tokens (exactly 2,009,343 tokens). From here you can posit several questions as Is there a temporal pattern to the length of addresses? How do the lengths of the past several administration’s speeches compare to those of FDR, Abraham Lincoln, and George Washington?
+
+The best way to see this is by using a scatter plot. You can draw it by using the `ggplot` function, putting the year on the x-axis and the length in words `n` on the y-axis.
+
+```{r message=FALSE, warning=FALSE}
+all_words %>%
+  group_by(year) %>%
+  count() %>%
+  ggplot() +
+  geom_point(aes(year,
+                 n))
+```
+
+It seems that for the most part addresses steadily increased in length from 1790 to around 1850, decreased for a few years, and then increased again until the end of the 19th century. The length dramatically decreased around World War I, with a handful of fairly large outliers scattered throughout the 20th century. By 2001 their length decreased and begun a new increase. Is there any rational behind these changes? As we have seen, some presidents delivered written message while other delivered orally. Will it be the reason? To find out, let's colour the points using the `color` argument asking it to colour it by the value of `sotu_type`.
+
+```{r message=FALSE, warning=FALSE}
+all_words %>%
+  group_by(year) %>%
+  count() %>%
+  left_join(sotu_meta) %>%
+  ggplot() +
+  geom_point(aes(year,
+                 n,
+                 color = sotu_type))
+```
+As you can see that the rise in the 19th century occurred when the addresses switched to written documents, and the dramatic drop comes when Woodrow Wilson (in 1913) broke tradition and gave his State of the Union as a speech in the Congress. The outliers (the longest one) were all written addresses given after the end of World War II.
+
+Another question we can ask ourselves is whether membership of one party or another has an influence on the length of speeches? We can fiond out changing the argument of `color` from `sotu_type` to `party`.
+
+```{r message=FALSE, warning=FALSE}
+all_words %>%
+  group_by(year) %>%
+  count() %>%
+  left_join(sotu_meta) %>%
+  ggplot() +
+  geom_point(aes(year,
+                 n,
+                 color = party))
+```
+It does not seem that the parties have anything to do, but it is curious that since the late 1990s the Democrats are the ones who make the longest speeches. But let's leave these questions, they are more of a student of politics than linguistics.
+
+We saw that texts can be divided into sentences. A feature of style, and of the possible complexity of a text, is the length of sentences. So let's split all speeches into sentences and count how many words.
+
+```{r message=FALSE, warning=FALSE}
+all_sentences <- all_sotu %>%
+    unnest_tokens(sentence,
+                  text,
+                  token = "sentences") %>%
+  mutate(NumberWords = str_count(sentence,
+                            pattern = "\\w+"))
+```
+
+Now let's calculate the median and plot it, as we did with the number of words.
+
+```{r message=FALSE, warning=FALSE}
+all_sentences %>%
+  group_by(year) %>%
+  mutate(median = median(NumberWords)) %>%
+  left_join(sotu_meta) %>%
+  ggplot() +
+  geom_point(aes(year,
+                 median))
+```
+
+The plot shows a strong general trend in shorter sentences over time. Recall that a few addresses in the later half of the 20th century were long, written addresses much like those of the 19th century. It is particularly interesting that these do not show up in terms of the median sentence length. This points out at least one way in which the State of the Union addresses have been changed and adapted over time: shorter sentences.
+
+To make the pattern even more explicit, it is possible to add a smoothing line over the plot with the  `geom_smooth` function. Smoothing lines are a great addition to many plots. They have a dual purpose of picking out the general trend of time series data, while also highlighting any outlying data points.
+
+```{r message=FALSE, warning=FALSE}
+all_sentences %>%
+    group_by(year) %>%
+    mutate(median = median(NumberWords)) %>%
+    left_join(sotu_meta) %>%
+    ggplot(aes(x = year,
+               y = median)) +
+    geom_point() +
+    geom_smooth()
+```
+
+A warning! It is true that there is a general tendency to shorten the length of sentences in speeches, but there is a small problem that I have not taken into account and, although it would not change the final results, it must be taken into account. The tokenizer consider as sentence limits periods, and question and admirations marks, and within these texts there are quite a few abbreviations as mr, as you can see en the following table.
+
+```{r message=FALSE, warning=FALSE}
+all_words %>%
+  filter(str_detect(word, regex("\\bmr\\b", ignore_case = TRUE))) %>%
+  select(word)
+```
+
+## Most characteristic words of every president (Keywords){-}
+
+We have seen the most used bigrams in every president speech. They are very illustrative, but they are not the most characteristic words of each of the presidents. Let’s split the texts of all speeches by president, not the individual speeches. In the table below you can see that Roosevelt's most frequent word is “the” and his second most frequent word is “of”. They are the usual common and meaningless words.
+```{r message=FALSE, warning=FALSE}
+all_words_by_president <- all_sotu %>%
+  unnest_tokens(word, text) %>%
+  count(president, word, sort = T)
+
+# inspect data (top 10 sorted)
+
+all_words_by_president
+```
+
+There is a way to find the most important words in every set (series of speeches for each president) of speeches by comparing between them. The maths behind are complicated, but that's one of the beauties of R and all the libraries that are available. Ono of the methods to find out the most important or characteristic words of every president (or any other text) is know the Term Frequency–Inverse Document Frequency (tf-idf), a statistical measure of keyness which reflects how characteristic a word is of a specific text. Term Frequency–Inverse Document Frequency is based on the frequencies of words in a text compared to the frequency of documents in which it occurs. To find these words it is very easy with the `bind_tf_idf` function. 
+
+```{r eval = FALSE, message=FALSE, warning=FALSE}
+all_words_by_president %>%
+  bind_tf_idf(word, president, n) %>%
+  mutate(president = factor(president,
+                            levels = c("George Washington", "John Adams", "Thomas Jefferson",
+                                       "James Madison", "James Monroe", "John Quincy Adams",
+                                       "Andrew Jackson", "Martin Van Buren", "John Tyler",
+                                       "James K. Polk", "Zachary Taylor", "Millard Fillmore",
+                                       "Franklin Pierce", "James Buchanan", "Abraham Lincoln",
+                                       "Andrew Johnson", "Ulysses S. Grant", "Rutherford B. Hayes",
+                                       "Chester A. Arthur", "Grover Cleveland", "Benjamin Harrison",
+                                       "William McKinley", "Theodore Roosevelt", "William Howard Taft",
+                                       "Woodrow Wilson", "Warren G. Harding", "Calvin Coolidge",
+                                       "Herbert Hoover", "Franklin D. Roosevelt", "Harry S Truman",
+                                       "Dwight D. Eisenhower", "John F. Kennedy", "Lyndon B. Johnson",
+                                       "Richard M. Nixon", "Gerald R. Ford", "Jimmy Carter",
+                                       "Ronald Reagan", "George Bush", "William J. Clinton",
+                                       "George W. Bush", "Barack Obama", "Donald Trump", "Joe Biden"))) %>%
+  group_by(president) %>% 
+  slice_max(tf_idf, n = 10) %>% 
+  ungroup() %>%
+  mutate(word = reorder(word, tf_idf)) %>%
+  ggplot(aes(tf_idf, word, fill = president)) +
+  geom_col(show.legend = FALSE) +
+  labs(x = "tf-idf", y = NULL) +
+  facet_wrap(~president, ncol = 4, scales = "free")
+```
+```{r echo=F, fig.cap="", message=FALSE, warning=FALSE, fig.align="center", out.width='10%'}
+knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/MLex/master/image/MLex_010.png")
+```
+
+There're too many figures, they might be of insterest, but they are meaningless for us. So let’s remove them. To do it we have to redo some work. We have to split in tokens al the speeches, but before doing so, we have to delete all digits with the `mutate` function.
+
+```{r message=FALSE, warning=FALSE}
+all_words_by_president <- all_sotu %>%
+  mutate(text = str_remove_all(text, "[:digit:]")) %>%
+  unnest_tokens(word, text) %>%
+  count(president, word, sort = T)
+```
+
+Once done, we can plot it again. Nothing changes here.
+
+```{r eval = FALSE, message=FALSE, warning=FALSE}
+all_words_by_president %>%
+  bind_tf_idf(word, president, n) %>%
+  mutate(president = factor(president,
+                            levels = c("George Washington", "John Adams", "Thomas Jefferson",
+                                       "James Madison", "James Monroe", "John Quincy Adams",
+                                       "Andrew Jackson", "Martin Van Buren", "John Tyler",
+                                       "James K. Polk", "Zachary Taylor", "Millard Fillmore",
+                                       "Franklin Pierce", "James Buchanan", "Abraham Lincoln",
+                                       "Andrew Johnson", "Ulysses S. Grant", "Rutherford B. Hayes",
+                                       "Chester A. Arthur", "Grover Cleveland", "Benjamin Harrison",
+                                       "William McKinley", "Theodore Roosevelt", "William Howard Taft",
+                                       "Woodrow Wilson", "Warren G. Harding", "Calvin Coolidge",
+                                       "Herbert Hoover", "Franklin D. Roosevelt", "Harry S Truman",
+                                       "Dwight D. Eisenhower", "John F. Kennedy", "Lyndon B. Johnson",
+                                       "Richard M. Nixon", "Gerald R. Ford", "Jimmy Carter",
+                                       "Ronald Reagan", "George Bush", "William J. Clinton",
+                                       "George W. Bush", "Barack Obama", "Donald Trump", "Joe Biden"))) %>%
+  group_by(president) %>% 
+  slice_max(tf_idf, n = 10) %>% 
+  ungroup() %>%
+  mutate(word = reorder(word, tf_idf)) %>%
+  ggplot(aes(tf_idf, word, fill = president)) +
+  geom_col(show.legend = FALSE) +
+  labs(x = "tf-idf", y = NULL) +
+  facet_wrap(~president, ncol = 4, scales = "free")
+```
+```{r echo=F, fig.cap="", message=FALSE, warning=FALSE, fig.align="center", out.width='10%'}
+knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/MLex/master/image/MLex_011.png")
+```
+Now the charts are more meaningful, and it is up to you to interpret them. But there’re some problems we should be aware. If you pay attention to Kennedy's chart you’ll see “viet” and “nam”, but it is one word “viet-nam”. The very same happens with Bush Jr.’s “al-Qaida”, it¸s splited into two segments “al” and “qaida”. So when using these techniques to mine texts we must be aware of the hidden problems texts can contain.
+
+## Collocations{-}
+
+According to Altenberg (1991: 128), “roughly 70% of the running words in the corpus form part of recurrent word combinations of some kind.” The investigation of such word combinations in corpora of authentic language dates back to the earliest studies of collocations by Firth (1957) who summarised this principle as “you shall know a word by the company it keeps”.
+
+In this section we will see the collocations offered by all SOTU speeches. We have seen that a text can be divided into individual words (tokens) but also into n-grams (secuences of n-words or n-tokens). Let's split all SOTU speeches into bigrams.
+
+```{r message=FALSE, warning=FALSE}
+all_bigrams <- all_sotu %>%
+  unnest_tokens(bigram,
+                text,
+                token = "ngrams",
+                n = 2)
+
+# inspect data (top 10 sorted)
+
+all_bigrams %>%
+  count(bigram, sort = T)
+```
+
+As usual, the result is not very informative. Again grammatical words, prepositions, determiners and conjunctions float to the top of the table (the exception, expected, is “united states”). We might be tempted to use the `anti_join()` function to erase empty words (function words). However, we can not do it directly since in the list of stopwords that is loaded (`stop_words`) there are only unigrams, there are no bigrams, so the system would not work.
+
+The solution is to separate the bigrams constituents and delete all stopwords. Although you can put everything in one chuck of code, I will present it to you in several steps so that you can see the procedure and its logic.
+
+First, you will separate the two elements with the `separate()` function, and keep each bit in two different columns, `word1` and `word2`.
+
+```{r message=FALSE, warning=FALSE}
+separated_bigrams <- all_bigrams %>%
+  separate(bigram,
+            c("word1", "word2"),
+            sep = " ")
+
+# inspect data (top 10 sorted)
+
+separated_bigrams %>%
+  count(word1, word2, sort = T)
+```
+
+It looks identical to the table that was printed when we splited the texts into bigrams, but now each of the two parts is in a different variable.
+
+The next step is to delete all stopwords, but we will not make use of the `anti_join` function. You are going to extract with `%in%` all stopwords, both in the column `word1` and `word2`, that are not –`!`– in the column `word` of the object `stop_words`.
+
+```{r message=FALSE, warning=FALSE}
+filtered_bigrams <- separated_bigrams %>%
+  filter(!word1 %in% stop_words$word,
+         !word2 %in% stop_words$word)
+
+# inspect data (top 10 sorted)
+
+filtered_bigrams %>%
+  count(word1, word2, sort = T)
+```
+
+But what you¸re looking at aren’t bigrams, they’re two contiguous words hold in two different columns. We have to reconstruct the bigrams and we will achieve it with the `unite()` function, which brings together into a single column the values contained in two or more columns.
+
+```{r message=FALSE, warning=FALSE}
+united_bigrams <- filtered_bigrams %>%
+  unite(bigram, word1, word2, sep = " ")
+
+# inspect data (top 10 sorted)
+
+united_bigrams %>%
+  count(bigram, sort = T)
+```
+
+Now we will plot a graph with the bigrams that each president used most frequently. (It will take a bit of time to plot it.)
+
+```{r eval= FALSE, message=FALSE, warning=FALSE}
+united_bigrams %>%
+  mutate(president = factor(president,
+                            levels = c("George Washington", "John Adams", "Thomas Jefferson",
+                                       "James Madison", "James Monroe", "John Quincy Adams",
+                                       "Andrew Jackson", "Martin Van Buren", "John Tyler",
+                                       "James K. Polk", "Zachary Taylor", "Millard Fillmore",
+                                       "Franklin Pierce", "James Buchanan", "Abraham Lincoln",
+                                       "Andrew Johnson", "Ulysses S. Grant", "Rutherford B. Hayes",
+                                       "Chester A. Arthur", "Grover Cleveland", "Benjamin Harrison",
+                                       "William McKinley", "Theodore Roosevelt", "William Howard Taft",
+                                       "Woodrow Wilson", "Warren G. Harding", "Calvin Coolidge",
+                                       "Herbert Hoover", "Franklin D. Roosevelt", "Harry S Truman",
+                                       "Dwight D. Eisenhower", "John F. Kennedy", "Lyndon B. Johnson",
+                                       "Richard M. Nixon", "Gerald R. Ford", "Jimmy Carter",
+                                       "Ronald Reagan", "George Bush", "William J. Clinton",
+                                       "George W. Bush", "Barack Obama", "Donald Trump", "Joe Biden")))
+  count(president, bigram, sort = T) %>%
+  group_by(president) %>%
+  top_n(5) %>%
+  ggplot() +
+  geom_col(aes(y = n , x = reorder(bigram,n)),
+           fill = "maroon") +
+  coord_flip() +
+  facet_wrap(~ president, ncol = 4, scales = "free")
+```
+
+```{r echo=F, fig.cap="", message=FALSE, warning=FALSE, fig.align="center", out.width='10%'}
+knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/MLex/master/image/MLex_009.png")
+```
+
+There’re many other mining possibilities, as the Part-of-Speech (PoS) tagging which identifies the word classes of words (e.g., noun, adjective, verb, etc.) in a text and adds part-of-speech tags to each word. But we haven’t enough time. I hope this short tutorial serves to awaken your curiosity and you will dare to get the most out of this programming language.
+
+<div class="warning" style='padding:0.1em; background-color:#008080; color:#f2f2f2'>
+<span>
+<p style='margin-top:1em; text-align:center'>
+<b>REMEMBER!</b></p>
+<p style='margin-left:1em;'>
+</p></span>
+</div>
+
+<div>
+<center>
+<img src="https://raw.githubusercontent.com/7PartidasDigital/MLex/master/image/R_google.png" width="500"/>
+<center>
+</div>
+```{r message=FALSE, warning=FALSE}
+sessionInfo()
+```
+
+<div class="warning" style='padding:0.1em; background-color:#804000; color:#f2f2f2'>
+<span>
+<p style='margin-top:1em; text-align:center'>
+<b>NOTE</b>
+<br>This R Notebook is based on some [Ladal](https://ladal.edu.au/tutorials.html), [Programming Historian](https://programminghistorian.org/en/lessons/basic-text-processing-in-r) and [CuentaPalabras](http://www.aic.uva.es/cuentapalabras/) tutorials.<br>For linguistics I highly recommend Ladal tutorials.</p>
+<p style='margin-left:1em;'>
+</p></span>
+</div>
+
+<div>
+<center>
+<img src="https://raw.githubusercontent.com/7PartidasDigital/MLex/master/image/EXPLICIT-7PARTIDAS.png"/>
+<br>PID2020-112621GB-I00/AEI/10.13039/501100011033
+</center>
+</div>

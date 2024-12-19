@@ -1,0 +1,185 @@
+---
+title: "A hands-on in R for Linguists"
+author: "J. M. Fradejas"
+date: "2023.09.21"
+output: html_notebook
+---
+
+<div>
+<center>
+<img src="https://raw.githubusercontent.com/7PartidasDigital/MLex/master/image/MLex-logo.png" width="250"/>
+<center>
+</div>
+
+
+# Introduction
+
+The first Notebook explained how to set up you computer to work with R. The second showed how to do some text analysis, and we used the State of the Union addresses from the times of George Whasington (1790) up to the last one by Joe Biden (2023), a large corpus in every sense of the term. We have been fiddling around at the token level so we were not able to tell the difference between _left_ in _Joe left the room_ and _Joe is in the room on the left_. In the first case is a verb, on the second a noun. Now, we will go a little further, we will ask R to tag one of the addresses morphologically. To tag morphologically every word of a given text is a simple task for R, although it was not for those who designed the systems.
+
+We are not going to dwell on explaining how the Treebanks with which the various PoS taggers are trained are created. Suffice it to say that in R there are several libraries to PoS tag texts in a variety of languages including Latin and some Old Languages. Some are better than others, and some of them even can do syntactic parsing. The following table is a list of all the pre-trained models for the `udpipe` library, the one we will be using today. 
+
+```{r lmod, echo = F, message=F, warning=F}
+Languages <- c("Afrikaans", "Ancient Greek", "Arabic", "Armenian",  "Basque", "Belarusian", "bulgarian-btb", "Buryat",  "Catalan", "Chinese", "Coptic", "Croatian", "Czech",  "Danish", "Dutch", "English", "Estonian", "Finnish",  "French", "Galician", "German", "Gothic", "Greek",  "Hebrew", "Hindi", "Hungarian", "Indonesian", "Irish Gaelic",  "Italian", "Japanese", "Kazakh", "Korean", "Kurmanji",  "Latin", "Latvian", "Lithuanian", "Maltese", "Marathi",  "North Sami", "Norwegian", "Old Church Slavonic",  "Old French", "Old Russian", "Persian", "Polish", "Portugese",  "Romanian", "Russian", "Sanskrit", "Scottish Gaelic",  "Serbian", "Slovak", "Slovenian", "Spanish", "Swedish",  "Tamil", "Telugu", "Turkish", "Ukrainian", "Upper Sorbia",  "Urdu", "Uyghur", "Vietnamese", "Wolof") 
+Models <- c("afrikaans-afribooms", "ancient_greek-perseus, ancient_greek-proiel", "arabic-padt", "armenian-armtdp", "basque-bdt", "belarusian-hse",  "bulgarian-btb", "buryat-bdt", "catalan-ancora",  "chinese-gsd, chinese-gsdsimp, classical_chinese-kyoto",  "coptic-scriptorium", "croatian-set",  "czech-cac, czech-cltt, czech-fictree, czech-pdt", "danish-ddt",  "dutch-alpino, dutch-lassysmall",  "english-ewt, english-gum, english-lines, english-partut",  "estonian-edt, estonian-ewt", "finnish-ftb, finnish-tdt",  "french-gsd, french-partut, french-sequoia, french-spoken",  "galician-ctg, galician-treegal", "german-gsd, german-hdt",  "gothic-proiel", "greek-gdt", "hebrew-htb", "hindi-hdtb",  "hungarian-szeged", "indonesian-gsd", "irish-idt",  "italian-isdt, italian-partut, italian-postwita, italian-twittiro, italian-vit",  "japanese-gsd", "kazakh-ktb", "korean-gsd, korean-kaist",  "kurmanji-mg", "latin-ittb, latin-perseus, latin-proiel",  "latvian-lvtb", "lithuanian-alksnis, lithuanian-hse",  "maltese-mudt", "marathi-ufal", "north_sami-giella",  "norwegian-bokmaal, norwegian-nynorsk, norwegian-nynorsklia", "old_church_slavonic-proiel", "old_french-srcmf", "old_russian-torot", "persian-seraji", "polish-lfg, polish-pdb, polish-sz", "portuguese-bosque, portuguese-br, portuguese-gsd", "romanian-nonstandard, romanian-rrt", "russian-gsd, russian-syntagrus, russian-taiga", "sanskrit-ufal", "scottish_gaelic-arcosg", "serbian-set", "slovak-snk", "slovenian-ssj, slovenian-sst", "spanish-ancora, spanish-gsd", "swedish-lines, swedish-talbanken", "tamil-ttb", "telugu-mtg", "turkish-imst", "ukrainian-iu", "upper_sorbian-ufal", "urdu-udtb", "uyghur-udt", "vietnamese-vtb", "wolof-wtb")
+data.frame(Languages, Models) %>%
+  as.data.frame() %>%
+  flextable::flextable() %>%
+  flextable::set_table_properties(width = .95, layout = "autofit") %>%
+  flextable::theme_zebra() %>%
+  flextable::fontsize(size = 10) %>%
+  flextable::fontsize(size = 10, part = "header") %>%
+  flextable::align_text_col(align = "left") %>%
+  flextable::set_caption(caption = "Languages and language models available via udpipe.")  %>%
+  flextable::border_outer()
+```
+
+## POS-Tagging with UDPipe
+
+For this session you need a new library `udpipe`. So let's install it in your computers:
+
+```{r prep1, eval = F, message=FALSE, warning=FALSE}
+# install package
+install.packages("udpipe")
+install.packages("textplot")
+install.packages("flextable") # This is not necessary, but I`m using it to plot tables.
+```
+
+The other libraries you will need are, if you read and run the first Notebook, already installed in your computers. But having installed a library in your computer does not mean you can use it straightforward. You have to load it to make use of its functions. So let's load all libraries needed for this session.
+
+```{r message=FALSE, warning=FALSE}
+# load packages
+library(tidyverse)
+library(udpipe)
+```
+
+We can use any of the models showed in the aforementioned table. If you scan it, you will reach the row for English, and you you will see that there are four models `english-ewt`, `english-gum`, `english-lines`, `english-partut`. The first step is to download a model, in this case we will use the `english-gum`. To download it to your system use
+
+```{r message=FALSE, warning=FALSE}
+# Download model
+udpipe_download_model(language = "english-gum")
+```
+
+If you want to use any other model, for any other language, all you have to do is to download it to your computer by changing the model name. Now we have to load into R the model to use it. (Remember, downloading / installing a library in your computer does not mean you can use it straightforward, you have to load it into R.)
+
+```{r message=FALSE, warning=FALSE}
+# Load into R the model (Check your working directory for the correct name of the model.)
+model_gum <- udpipe_load_model(file = 'english-gum-ud-2.5-191206.udpipe')
+```
+
+The next step is to get some text to PoS tag it. Let's us use one the SOTU addresses with
+
+```{r message=FALSE, warning=FALSE}
+# Download text to PoS tag
+sotu_text <- read_lines(url("https://raw.githubusercontent.com/7PartidasDigital/MLex/master/sotu/242.txt"))
+```
+
+Now we can annotate the text with
+
+```{r message=FALSE, warning=FALSE}
+# Annotate / analyze
+analize <- udpipe_annotate(model_gum, sotu_text) %>%
+  as_tibble()
+
+# Inspect
+analize
+```
+(Remenber, to see all the columns click the black triangle (▶︎) on the top right of the table.)
+
+The first three columns, are not very informative. So click the ▶︎, and we'll reach the column` sentence`
+
+There are six columns. The first one `token_id` is the consecutive number given to every single token (including punctuation) in the text. The column `token` is the word (or punctutation mark) as it appears in the text feed to the system. The column `lemma` is the word as you may look for it in a dictionary. Next comes `upos` column. The acronym `upos` stands for [**U**niversal **P**arts **O**f **S**peech](https://universaldependencies.org/u/pos/all.html) and being universal, they are independent of the specific language being used (they are ‘universal’). The list of upos tags is therefore limited:
+
+```{r echo = F, message=F, warning=F}
+tags <- c("ADJ", "ADP", "ADV", "AUX", "CCONJ", "DET", "INTJ", "NOUN", "NUM", "PART", "PRON", "PROPN", "PUNCT", "SCONJ", "SYM", "VERB", "X")
+values <- c("adjective", "adposition", "adverb", "auxiliary", "coordinating conjunction", "determiner", "interjection", "noun", "numeral", "particle", "pronoun", "proper noun", "punctuation", "subordinating conjunction", "symbol", "verb", "other")
+data.frame(tags, values) %>%
+  as.data.frame() %>%
+  flextable::flextable() %>%
+  flextable::set_table_properties(width = .95, layout = "autofit") %>%
+  flextable::theme_zebra() %>%
+  flextable::fontsize(size = 10) %>%
+  flextable::fontsize(size = 10, part = "header") %>%
+  flextable::align_text_col(align = "left") %>%
+  flextable::set_caption(caption = "UPOS tags and their meaning.")  %>%
+  flextable::border_outer()
+```
+The next column is `xpos` (it might look as `xp…`) language-specific tags. For example, in English, the `upos` tag for a verb might be `VERB`, while the corresponding `xpos` tag might be `VB` (for a base form verb) or `VBD` (for a past tense verb). In Spanish, the `upos` tag for a verb might still be `VERB`, but the `xpos` tag might be `VER:cond` (for a conditional verb).
+
+The column `feats` offer more detailed features of every word. Let's have a look the eighth token, *our*, in the `feats` column we have a lot of information about this token: `Number=Plur|Person=1|Poss=Yes|PronType=Prs`. With all this information we can do quite a few things. For starters we can have a look at frequency of every PoS tag:
+
+```{r echo = F, message=F, warning=F}
+analize %>%
+  count(upos)
+```
+
+But parsing data tables can be quite boring (a very little informative), so we can plot it:
+
+```{r echo = F, message=F, warning=F}
+analize %>%
+  count(upos) %>%
+  mutate(upos = reorder(upos, n)) %>%
+  ggplot(aes(upos, n)) +
+  geom_col() +
+  coord_flip()
+```
+It seems nouns are the most frequent in this speech. Let's see which are the 30 most used nouns:
+
+```{r echo = F, message=F, warning=F}
+analize %>%
+  filter(upos == "NOUN") %>%
+  count(token) %>%
+  mutate(token = reorder(token, n)) %>%
+  top_n(30) %>%
+  ggplot(aes(token, n)) +
+  geom_col(fill = "darkgreen") +
+  coord_flip()
+```
+
+If we scan the words on the left of the plot *year*, *cost* or *child* are plotted in singular and in plural *years*, *costs*, *children*, while other are just in plural *families*, *workers* or singulkar *home*, *tax*. That is because we are looking into tokens, that is, graphical forms. If we turn into lemmas, the frequencies will change:
+
+```{r echo = F, message=F, warning=F}
+analize %>%
+  filter(upos == "NOUN") %>%
+  count(lemma) %>%
+  mutate(lemma = reorder(lemma, n)) %>%
+  top_n(30) %>%
+  ggplot(aes(lemma, n)) +
+  geom_col(fill = "orange") +
+  coord_flip()
+```
+
+Now, if in the line `filter(upos == "NOUN") %>%` we change any other `upos` tag, we can access some more info to work with.
+
+## Dependency Parsing Using UDPipe
+
+In addition to pos-tagging, we can also generate plots showing the syntactic dependencies of the different constituents of a sentence. For this, we generate an object that contains a sentence (in this case, the sentence *Linguistics is the scientific study of language*), and we then plot (or visualize) the dependencies using the `textplot_dependencyparser` function.  
+
+```{r message=FALSE, warning=FALSE}
+# parse text
+sample_text <- udpipe_annotate(model_gum, x = "Linguistics is the scientific study of language") %>%
+  as_tibble()
+# inspect
+sample_text
+```
+We now generate the plot.
+
+```{r fig.width=8, message=FALSE, warning=FALSE}
+# Generate dependency plot
+textplot::textplot_dependencyparser(sample_text, size = 2)
+```
+
+<div class="warning" style='padding:0.1em; background-color:#804000; color:#f2f2f2'>
+<span>
+<p style='margin-top:1em; text-align:center'>
+<b>NOTE</b>
+<br>This R Notebook is based on some [Ladal](https://ladal.edu.au/tutorials.html), [Programming Historian](https://programminghistorian.org/en/lessons/basic-text-processing-in-r) and [CuentaPalabras](http://www.aic.uva.es/cuentapalabras/) tutorials.<br>For linguistics I highly recommend Ladal tutorials.</p>
+<p style='margin-left:1em;'>
+</p></span>
+</div>
+
+<div>
+<center>
+<img src="https://raw.githubusercontent.com/7PartidasDigital/MLex/master/image/EXPLICIT-7PARTIDAS.png"/>
+<br>PID2020-112621GB-I00/AEI/10.13039/501100011033
+</center>
+</div>
