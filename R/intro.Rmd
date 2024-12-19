@@ -218,7 +218,7 @@ install.packages("quanteda")
 install.packages("stopwords")
 ```
 
-Se estará un buen rato, depende de tu conexión a internet, mostrándote un motón de información en la consola. En la imagen siguiente te muestro algo de lo que podrías ver mientras instalas las librería. Ten en cuenta que esta es de una, y todas las que le son necearias, que no vas a necesitar por ahora. Al final te informa de dónde ha guardado las librerías
+Se estará un buen rato, depende de tu conexión a internet, mostrándote un motón de información en la consola. En la imagen siguiente te muestro algo de lo que podrías ver mientras instalas las librería. Ten en cuenta que esta es de una, y todas las que le son necearias, que no vas a necesitar por ahora. Al final te informa de dónde ha guardado las librerías.
 
 ```{r echo=F, fig.cap="", message=FALSE, warning=FALSE, fig.align="center", out.width='75%'}
 knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/Taller-UVa/master/images/UVa_013.png")
@@ -234,24 +234,24 @@ library(quanteda)
 library(stopwords)
 ```
 
-La sección de preparación sesión de cualquier _script_ de R debe indicar, y cargar, todas las librerías que se van a utilizar.
+La sección de preparación de la sesión de trabajo de cualquier _script_ de R debe indicar, y cargar, todas las librerías que se van a utilizar.
 
-En la ventana del editor de RStudio, los bloques de códifo que sirven para instalar y cargar las librerías que necesitarás debe tener el mismo aspecto que lo que hay en la siguiente imagen:
+En la ventana del editor de RStudio, los bloques de código que sirven para instalar y cargar las librerías que necesitarás deberían tener el mismo aspecto que lo que hay en la siguiente imagen:
 
 ```{r echo=F, fig.cap="", message=FALSE, warning=FALSE, fig.align="center", out.width='75%'}
 knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/Taller-UVa/master/images/UVa_006.png")
 ``` 
 
-Las líneas que comienzan con *#* y están impresas en azul (a ti te aparecerán en verde) son comentarios. Son muy útiles para recordarte qué es lo que una línea o conjunto de líneas de código hace. (Las línea onduladas que ves no quieren decir nada, es algo del corrector ortográfico y no debe preocuparte.)
+Las líneas que comienzan con *#* y que están impresas en azul (a ti te aparecerán en verde) son comentarios. Son muy útiles para recordarte qué es lo que una línea o conjunto de líneas de código hace. (Las línea onduladas que ves no quieren decir nada, es algo del corrector ortográfico, que desconoce el español, y no debe preocuparte.)
 
 
-## Obtener ayuda{-}
+## Conseguir ayuda{-}
 
-Cuando trabajes con R, te encontrarás problemas y te enfrentarás con retos que no sabrás cómo resolver. Una cosa excelente de R es que hay varios caminos para conseguir ayuda o localizar información acerca de los problemas con los que te puedas tropezar.
+Cuando trabajes con R te encontrarás problemas y te enfrentarás con retos que no sabrás cómo resolver. Una cosa excelente de R es que hay varias maneras para obtener ayuda o localizar información acerca de los problemas con los que te puedas tropezar.
 
 ### Buscar la ayuda dentro de R{-}
 
-Para acceder a la ayuda sobre las funciones que hay en cada librería, qué argumentos deben incluirse en una función o cómo usarlas, puedes usar la instrucción `help()` o sencillamente teclear una `?` antes del nombre de la librería o función de las que quieres saber más. Si ejecutas cualquiera de estas dos instrucciones en la consola, la respuesta aparecerá en la pestaña **Help**  del panel inferior derecho.
+Para acceder a la ayuda sobre las funciones que hay en cada librería, qué argumentos deben incluirse en una función o cómo usarlas, puedes usar la instrucción `help()` o sencillamente teclear una `?` antes del nombre de la librería o función de las que quieres saber más. Si ejecutas cualquiera de estas dos instrucciones en la consola, la respuesta aparecerá en la pestaña **Help** del panel inferior derecho.
 
 ```{r intro_01_11, echo=TRUE, eval=F, warning=F, message=F}
 help(library) 
@@ -265,9 +265,9 @@ knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/Tall
 
 Tanto R como RStudio tienen otras fuentes "oficiales" de ayuda:
 
-* Puedes leer la documentación o _vignettes_ de una librería, p. ej, la de `Tidyverse` <https://cran.r-project.org/package=tidyverse>
+* Puedes leer la documentación y _vignettes_ de una librería, p. ej, la de `Tidyverse` <https://cran.r-project.org/package=tidyverse>
 
-* Usa las chuletas de RStudio, las tienes en <https://www.rstudio.com/resources/cheatsheets/>
+* Puedes usar las chuletas de RStudio; las tienes en <https://www.rstudio.com/resources/cheatsheets/>
 
 * Échale una ojeada al  `Keyboard Shortcuts Help` en la pestaña `Tools` del menú superior de RStudio, ahí puedes encontrar algunos trucos interesantes.
 
@@ -281,7 +281,7 @@ Otra de las grandes ventajas de R es que puedes encontrar la solución a tus pre
 </center>
 </div>
 <br>
-Desde el aparición de la IA generativa del tipo ChatGPT o Copilot, se puede recurrir a ella para que te ayude a solucionar un problema en un _script_. Al reescibir partes del código de este taller, recuperé un _script_ que me dio un error y no sabía cuál era. había escrito el código hace dos o tres años y no lo documenté adecuadamente con `#`. Copilot, en segundos, me dijo dónde estaba el error. ¡Había olvidado cargar una librería!
+Desde el aparición de la IA generativa del tipo ChatGPT o Copilot, se puede recurrir a ella para que te ayude a solucionar un problema en un _script_. Al reescibir partes del código de este taller, recuperé un _script_ que me dio un error y no sabía cuál era. Había escrito ese código hace varios años y no lo documenté adecuadamente con `#`. Copilot, en segundos, me dijo dónde estaba el error. ¡Había olvidado cargar una librería!
 
 ```{r echo=F, fig.cap="", message=FALSE, warning=FALSE, fig.align="center", out.width='50%'}
 knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/Taller-UVa/master/images/UVa_012.png")
@@ -292,7 +292,7 @@ knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/Tall
 <span>
 <p style='margin-top:1em; text-align:center'>
 <b>NOTE</b>
-<br>Este `R Notebook` en tutoriales de [Ladal](https://ladal.edu.au/tutorials.html), [Programming Historian](https://programminghistorian.org/en/lessons/basic-text-processing-in-r) y [CuentaPalabras](http://www.aic.uva.es/cuentapalabras/).<br>Para los interesados en la lingüistica recomiendo vivamente los tutoriales de **Ladal**.</p>
+<br>Este `R Notebook` se basa en tutoriales de [Ladal](https://ladal.edu.au/tutorials.html), [Programming Historian](https://programminghistorian.org/en/lessons/basic-text-processing-in-r) y [CuentaPalabras](http://www.aic.uva.es/cuentapalabras/).<br>A los interesados en la lingüística y cómo analizarla con la ayuda de R, les recomiendo vivamente los tutoriales de **Ladal**.</p>
 <p style='margin-left:1em;'>
 </p></span>
 </div>
@@ -300,6 +300,8 @@ knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/Tall
 <div>
 <center>
 <img src="https://raw.githubusercontent.com/7PartidasDigital/MLex/master/image/EXPLICIT-7PARTIDAS.png"/>
-<br>PID2020-112621GB-I00/AEI/10.13039/501100011033
+
+<img src="https://7partidas.hypotheses.org/files/2021/06/7P_2_logo.png" width=25%/>
+<br>Financiado por la AEI/10.13039/501100011033
 </center>
 </div>
