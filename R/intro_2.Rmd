@@ -196,27 +196,20 @@ De nuevo, estos preparativos de sesión no son obligatorios ni necesarios, pero 
 ```{r, message=F, warning=F}
 # establece opciones
 options(stringsAsFactors = F)                    
-options(scipen = 999) # establece que utilice la notación científica
+options(scipen = 999)
 options(max.print=100)
 ```
 
-<div class="warning" style='padding:0.1em; background-color:#239b56; color:#f2f2f2'>
-<span>
-<p style='margin-top:1em; text-align:center'>
-<b>NOTA</b><br>La primera línea del bloque anterior, que comienza con `#`, es un comentario y no se ejecutará, aunque fuera un línea de código.<br>También lo he puesto en la segunda `option`, lo que hace es indicar o recordar qué es lo que hace esa línea de código.<br>Es una práctica excelente comentar los _scripts_.</p>
-<p style='margin-left:1em;'>
-</p></span>
-</div>
 
 ## Packages{-}
 
-When using R, most of the functions are not loaded or even installing automatically. Instead, most functions are in contained in what are called **packages**. 
+Al usar R, la mayoría de la funciones no están cargadas; es más, ni siquiera están instaladas. La gran mayoría de las funciones en encuentran en lo que se llaman **packages** o **librerías**. 
 
-The bare-bone R comes with about 30 packages ("base R").  There are over 10,000 user-contributed packages; you can discover these packages online.  A prevalent collection of packages is the `tidyverse`, which includes `ggplot2`, a package for making graphics.
+Lo que has instalado de R es lo básico ("base R"), trae consigo unas 30 librerías. Pero existen más de 10,000 librarías creadas y mantenidas por usuarios de todo el mundo; puedes saber  de ellos y cómo utilizarlos en la red.  Hay un conjuntos de librerías que es básicos, pero que no está incluido en el _base R_. Se trata de `tidyverse`, que incluye `ggplot2`, una librería para trazar magníficos gráficos.
 
-Before being able to use a package, we need to install the package (using the `install.packages` function) and load the package (using the `library` function). However, a package only needs to be installed once(!) and can then simply be loaded. When you install a package, this will likely install several other packages it depends on. You should have already installed `tidyverse`, `tidyverse`, `quanteda` and `tm` before the workshop, to save time and problems. 
+Antes de poder usar una librería, hay que instalarla en el ordenador (con la función `install.packages`) y cargar en cada sesión de trabajo (con la función `library`) en la que se quiera utilizar. Sin embargo, una librería (o paquete) solo se ha de instalar una vez, y una vez instado solo hay que cargarlo en la sesión de trabajo en la que sea necesario. Cuando se instala un paquete, es posible que se instalen otros varios que le son impresicindibles para funcionar adecuadamente. Cuando vengas al taller, debes tener instalado `tidyverse`, `tidytext`, `quanteda` and `tm`, de esta manera ahorraremos timepo y problemas.
 
-You must load the package in any new R session where you want to use that package. Below I show what you need to type when you want to install the `tidyverse`, the `tidytext`,  the `quanteda`, and the `stopwords` packages (which are the packages that we will need in this workshop).
+Recuerda que has de cargar las librerías en todas aquellas sesiones de R en las que las quieras utilizar. A continuación te muestro qué has de hacer para instalar las librería `tidyverse`,  `tidytext`,  `quanteda` y `stopwords` (que son las que vamos a necesitar a lo largo de este taller).
 
 ```{r, echo=T, eval=F, message=F, warning=F}
 install.packages("tidyverse")
@@ -225,7 +218,7 @@ install.packages("quanteda")
 install.packages("stopwords")
 ```
 
-To load these packages, use the `library` function which takes the package name as its main argument.
+Para cargar los paquetes que has intalado, utiliza la función `library`, cuyo argumento, que se encierra entre los paréntesis, es el nombre de la librería.
 
 ```{r message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -234,23 +227,24 @@ library(quanteda)
 library(stopwords)
 ```
 
-The session preparation section of your script file will thus also state which packages a script relies on.
+La sección de preparación sesión de cualquier _script_ de R debe indicar, y cargar, todas las librerías que se van a utilizar.
 
-In the script editor pane of RStudio, the code blocks that install and activate packages would look like this:
+En la ventana del editor de RStudio, los bloques de códifo que sirven para instalar y cargar las librerías que necesitarás debe tener el mismo aspecto que lo que hay en la siguiente imagen:
 
-```{r echo=F, fig.cap="", message=FALSE, warning=FALSE, out.width='10%'}
-knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/MLex/master/image/MLex_006.png")
+```{r echo=F, fig.cap="", message=FALSE, warning=FALSE, fig.align="center", out.width='75%'}
+knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/Taller-UVa/master/images/UVa_006.png")
 ``` 
 
-The lines starting with *#* and printed in green are comments. They are very useful to remind you what a line or chunk of code does.
+Las líneas que comienzan con *#* y están impresas en azul (a ti te aparecerán en verde) son comentarios. Son muy útiles para recordarte qué es lo que una línea o conjunto de líneas de código hace. (Las línea onduladas que ves no quieren decir nada, es algo del corrector ortográfico y no debe preocuparte.)
 
-## Getting help{-}
 
-When working with R, you will encounter issues and face challenges. A very good thing about R is that it provides various ways to get help or find information about the issues you face.
+## Obtener ayuda{-}
 
-### Finding help within R{-}
+Cuando trabajes con R, te encontrarás problemas y te enfrentarás con retos que no sabrás cómo resolver. Una cosa excelente de R es que hay varios caminos para conseguir ayuda o localizar información acerca de los problemas con los que te puedas tropezar.
 
-To get help regrading what functions a package contains, which arguments a function takes or to get information about how to use a function, you can use the `help` function or you can simply type a `?` before the package or or function. I you run any of these two instruccions in the Console pane, the Help tab on the botton right pane will show the answer.
+### Buscar la ayuda dentro de R{-}
+
+Para acceder a la ayuda sobre las funciones que hay en cada librería, qué argumentos deben incluirse en una función o cómo usarlas, puedes usar la instrucción `help()` o sencillamente teclear una `?` antes del nombre de la librería o función de las que quieres saber más. Si ejecutas cualquiera de estas dos instrucciones en la consola, la respuesta aparecerá en la pestaña **Help**  del panel inferior derecho.
 
 ```{r intro_01_11, echo=TRUE, eval=F, warning=F, message=F}
 help(library) 
@@ -258,35 +252,35 @@ help(library)
 ```
 
 
-```{r echo=F, fig.cap="", message=FALSE, warning=FALSE, out.width='25%'}
-knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/MLex/master/image/MLex_007.png")
+```{r echo=F, fig.cap="", message=FALSE, warning=FALSE, fig.align="center", out.width='100%'}
+knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/Taller-UVa/master/images/UVa_007.png")
 ``` 
 
-There are also other "official" help resources from R/RStudio. 
+Tanto R como RStudio tienen otras fuentes "oficiales" de ayuda:
 
-* Read official package documentation, see vignettes, e.g., Tidyverse <https://cran.r-project.org/package=tidyverse>
+* Puedes leer la documentación o _vignettes_ de una librería, p. ej, la de `Tidyverse` <https://cran.r-project.org/package=tidyverse>
 
-* Use the RStudio Cheat Sheets at <https://www.rstudio.com/resources/cheatsheets/>
+* Usa las chuletas de RStudio, las tienes en <https://www.rstudio.com/resources/cheatsheets/>
 
-* Check out the keyboard shortcuts `Help` under `Tools` in RStudio for some good tips 
+* Échale una ojeada al  `Keyboard Shortcuts Help` en la pestaña `Tools` del menú superior de RStudio, ahí puedes encontrar algunos trucos interesantes.
 
-### Finding help online{-}
+### Buscar ayuda en la red{-}
 
-Una de las mejores cosas de R es que puedes encontrar la solución a tus preguntas y problemas en la red. [R-bloggers](https://www.r-bloggers.com/) y [Stackoverflow](https://stackoverflow.com/questions/tagged/r) son sitios magníficos para localizar trucos y ayuda.
+Otra de las grandes ventajas de R es que puedes encontrar la solución a tus preguntas y problemas en la red. [R-bloggers](https://www.r-bloggers.com/) y [Stackoverflow](https://stackoverflow.com/questions/tagged/r) son sitios magníficos para localizar trucos y ayuda (a veces puede parecer que la han escrito marcianos).
 
 <div>
 <center>
-<img src="https://raw.githubusercontent.com/7PartidasDigital/MLex/master/image/R_google.png" width="500"/>
+<img src="https://raw.githubusercontent.com/7PartidasDigital/MLex/master/image/R_google.png" width="300"/>
 </center>
 </div>
-
-Desde el aparición de la IA generativa del tipo ChatGPT o Copilot, se puede recurrir a ella para que te ayude a solucionar un problema en un _script_. Al reescibir partes del código de este taller, recuperé un _script_ que me dio un error y no sabía cuál era. había escrito el código hace dos o tres años y no lo documenté adecuadamente con `#`. Copilot en segundos me dijo donde estaba el error. ¡Había olvidado cargar una librería!
+<br>
+Desde el aparición de la IA generativa del tipo ChatGPT o Copilot, se puede recurrir a ella para que te ayude a solucionar un problema en un _script_. Al reescibir partes del código de este taller, recuperé un _script_ que me dio un error y no sabía cuál era. había escrito el código hace dos o tres años y no lo documenté adecuadamente con `#`. Copilot, en segundos, me dijo dónde estaba el error. ¡Había olvidado cargar una librería!
 
 ```{r echo=F, fig.cap="", message=FALSE, warning=FALSE, fig.align="center", out.width='50%'}
 knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/Taller-UVa/master/images/UVa_012.png")
 ``` 
 
-
+<br>
 <div class="warning" style='padding:0.1em; background-color:#804000; color:#f2f2f2'>
 <span>
 <p style='margin-top:1em; text-align:center'>
