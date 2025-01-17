@@ -63,7 +63,7 @@ Por favor, sigue las instrucciones que hay a continuación para instalar R y RSt
 
 <div>
 <center>
-<img src="https://raw.githubusercontent.com/7PartidasDigital/Taller-UVa/master/images/MacOs.png" width="70px"/>
+<img src="https://raw.githubusercontent.com/7PartidasDigital/Taller-UVa/refs/heads/main/images/MacOS.png" width="70px"/>
 </center>
 </div>
 
@@ -234,16 +234,18 @@ library(quanteda)
 library(stopwords)
 ```
 
-La sección de preparación de la sesión de trabajo de cualquier _script_ de R debe indicar, y cargar, todas las librerías que se van a utilizar.
+La sección de preparación de la sesión de trabajo de cualquier _script_ de R debe indicar, y cargar, todas las librerías que se van a utilizar, puede ahorrarte algún que otro quebradero de cabeza.
 
-En la ventana del editor de RStudio, los bloques de código que sirven para instalar y cargar las librerías que necesitarás deberían tener el mismo aspecto que lo que hay en la siguiente imagen:
+Los bloques de código que sirven para instalar y cargar las librerías que necesitarás deberían tener el mismo aspecto que lo que hay en la siguiente imagen:
 
 ```{r echo=F, fig.cap="", message=FALSE, warning=FALSE, fig.align="center", out.width='75%'}
 knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/Taller-UVa/master/images/UVa_006.png")
 ``` 
 
-Las líneas que comienzan con *#* y que están impresas en azul (a ti te aparecerán en verde) son comentarios. Son muy útiles para recordarte qué es lo que una línea o conjunto de líneas de código hace. (Las línea onduladas que ves no quieren decir nada, es algo del corrector ortográfico, que desconoce el español, y no debe preocuparte.)
+Las líneas que comienzan con *#* y que están impresas en azul (a ti te aparecerán en verde) son comentarios. Son muy útiles para recordarte qué es lo que una línea o conjunto de líneas de código hace. (Las línea onduladas que ves no quieren decir nada, es algo del corrector ortográfico de Rstudio, que desconoce el español. No debe preocuparte.)
 
+
+Fíjate que justo encima de la primera línea hay un triágulo amarillo. Es un aviso que me advierte de que el código, el script que tengo en el editor hace uso de una librería, llamada _tm_, que no tengo instalada. Me facilita el trabajo al recordarme que no la tengo aún en mi sistema y me da la posibilidad de instalarla con un sencillo clic.
 
 ## Conseguir ayuda{-}
 
