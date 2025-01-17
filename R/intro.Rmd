@@ -63,7 +63,7 @@ Por favor, sigue las instrucciones que hay a continuación para instalar R y RSt
 
 <div>
 <center>
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/MacOS_logo.svg/240px-MacOS_logo.svg.png" width="70px"/>
+<img src="https://raw.githubusercontent.com/7PartidasDigital/Taller-UVa/master/images/MacOs.png" width="70px"/>
 </center>
 </div>
 
