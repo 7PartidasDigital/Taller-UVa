@@ -1,8 +1,10 @@
 ---
-title: "R para los de Letras: Trabajando con textos"
+title: 'R para los de Letras: Trabajando con textos'
 author: "J. M. Fradejas"
 date: "2024.12.19"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 <div>
 <center>
@@ -55,7 +57,7 @@ last_sotu <- read_lines(url("https://raw.githubusercontent.com/7PartidasDigital/
 str(last_sotu)
 ```
 
-Una vez que lo hemos guardado en un **objeto**, es muy sencillo extraer información acerca de la frecuencia de las palabras que contiene y crear listas de palabras. Para lograrlo lo primero que hay que hacer es utilizar la función `unnest_tokens`, que dividirá el texto en palabras (tokens) y después usaremos la funcición `count` para conocer las frwecuencias absolutas de cada palabra tipo.
+Una vez que lo hemos guardado en un **objeto**, es muy sencillo extraer información acerca de la frecuencia de las palabras que contiene y crear listas de palabras. Para lograrlo lo primero que hay que hacer es utilizar la función `unnest_tokens`, que dividirá el texto en palabras (tokens) y después usaremos la funcición `count` para conocer las frecuencias absolutas de cada palabra tipo.
 
 Lo primero que hay que hacer es transformar ese extenso texto en una especie de tabla con la función `tibble`. Esto hará que podamos manejarlo con mayor facilidad.
 
@@ -70,7 +72,7 @@ tidy_sotu
 <div class="warning" style='padding:0.1em; background-color:#1e8449; color:#f2f2f2'>
 <span>
 <p style='margin-top:1em; text-align:center'>
-<b>ATENCIÓN</b><br>Los nombres de los **objetos** los voy a utilizar en inglés, pero nada impide que uses palabras de la lengua que mejor que convenga. Solo hay unas pequeñas limitaciones: no pueden empezar por un número; distingue entre mayúsculas y minúsculas —no es lo mismo `Ciudad` que `ciudad` que `CIUDAD` son tres nombres nombre diferentes— y hay una serie de caracteres que no se pueden utilizar (los símbolos matemáticos, las barras, y algunos otros).<br>Y una recomendación: no uses letras con tildes, pueden ser fuente de tremendos quebraderos de cabeza.<br></p>
+<b>ATENCIÓN</b><br>Los nombres de los **objetos** los voy a utilizar en inglés, pero nada impide que uses palabras de la lengua que mejor que convenga. Solo hay unas pequeñas limitaciones: 1) no pueden empezar por un número; 2) distingue entre mayúsculas y minúsculas —no es lo mismo `Ciudad` que `ciudad` que `CIUDAD` son tres nombres nombre diferentes— y 3) hay una serie de caracteres que no se pueden utilizar (los símbolos matemáticos, las barras, y algunos otros).<br>Y una recomendación: no uses letras con tildes, pueden ser fuente de tremendos quebraderos de cabeza.<br></p>
 <p style='margin-left:1em;'>
 </p></span>
 </div>
@@ -78,7 +80,7 @@ tidy_sotu
 
 Cada línea de esta tabla corresponde a un párrafo del discurso, es decir, incluye todo el texto que hay antes de cada golpe de la tecla ⏎. Ahora lo podemos dividir en tokens.
 
-Siempre que veas una tabla con la de antes, puedes recorrerla haciendo clic en el `Next` que hay en la parte inferior de la tabla. 
+Siempre que veas una tabla con la de antes, puedes recorrerla haciendo clic en el `Next` que hay en la parte inferior de la misma. 
 
 ```{r, message=FALSE, warning=FALSE}
 tidy_words <- tidy_sotu %>%
@@ -90,11 +92,11 @@ tidy_words <- tidy_sotu %>%
 tidy_words
 ```
 
-Lo que le henmos dicho a R que divida el texto que hay en el **objeto** `tidy_sotu` en palabras (tokens), que las cuente, las ordene de mayor a menor frecuencia (`n`) y las guarden en otro object llamado `tidy_words`.
+Lo que le hemos dicho a R es que divida el texto que hay en el **objeto** `tidy_sotu` en palabras (tokens), que las cuente, las ordene de mayor a menor frecuencia (`n`) y las guarde en otro object llamado `tidy_words`.
 
 Fíjate que en el margen inferior, en el lado izquierdo dice `1-10 of 1.735 rows`. Esto quiere decir que el texto del discurso de 2022 tiene 1735 palabras diferentes (palabras tipo), mientras que la columna `n` indica cuentas veces aparece cada una de las palabras tipo.
 
-Tan fácil como dividir el texto en palabras individuales, es el extraer los N-grams, es decir, secuencias de n palabras consecutivas. Es sencillo porque la función `unnest_tokens` tiene un argumento llamado `token` por medio del cual le puedes indicar a R que quieres extraer `ngrams`. Si es lo que te interesa, entonces debes especificar el número de palabras que que ha de agrupar; para ello se utiliza el argumento `n`. Con el código que hay a continuación le pides a R que quieres extraer todos los grupos de cuatro palabras (4-grams) y que informe de la frecuencia absoluta y que las presente en orden decreciente. 
+Tan fácil como dividir el texto en palabras individuales, es el extraer los _n-grams_, es decir, las secuencias de `n` palabras consecutivas. Es sencillo porque la función `unnest_tokens` tiene un argumento llamado `token` por medio del cual le puedes indicar a R que quieres extraer `ngrams`. Si es lo que te interesa, entonces debes especificar el número de palabras que que ha de agrupar; para ello se utiliza el argumento `n`. Con el código que hay a continuación le pides a R que quieres extraer todos los grupos de cuatro palabras (4-grams) y que informe de la frecuencia absoluta y que las presente en orden decreciente. 
 
 ```{r, message=FALSE, warning=FALSE}
 tidy_sotu %>%
@@ -105,7 +107,7 @@ tidy_sotu %>%
   count(word, sort=T)
 ```
 
-También es posible devidir el texto en oraciones (no enredemos con los coneptos de oración, aquí funcionan de otra manera) en vez de en palabras. De nuevo es fácil de hacer porque el argumento `tokens` de la función `unnest_tokens` puede tener el valor `sentences`.
+También es posible dividir el texto en oraciones (no enredemos con los coneptos de oración, aquí funcionan de otra manera) en vez de en palabras. De nuevo es fácil de hacer porque el argumento `tokens` de la función `unnest_tokens` puede tener el valor `sentences`.
 
 ```{r message=FALSE, warning=FALSE}
 tidy_sotu %>%
@@ -117,13 +119,13 @@ tidy_sotu %>%
 <div class="warning" style='padding:0.1em; background-color:#1e8449; color:#f2f2f2'>
 <span>
 <p style='margin-top:1em; text-align:center'>
-<b>ATENCIÓN</b><br>Cuando se le pide que divida cualquier texto en palabras, n-grams u oraciones, una de las cosas que hace es convertir las mayúsculas en minúsculas de manera que _First_ en _First Lady_ y la de cualquier caso de _first_ que pueda aparecer a lo largo del texto las cuente como la misma palabra tipo. Sé que esto es problemático en algunos casos, pero hay herramientas para solucionarlo.<br></p>
+<b>ATENCIÓN</b><br>Cuando se le pide que divida cualquier texto en palabras, _n-grams_ u oraciones, una de las cosas que hace es convertir las mayúsculas en minúsculas de manera que _First_ en _First Lady_ y la de cualquier caso de _first_ que pueda aparecer a lo largo del texto las cuente como la misma palabra tipo. Sé que esto es problemático en algunos casos, pero hay herramientas para solucionarlo.<br></p>
 <p style='margin-left:1em;'>
 </p></span>
 </div>
 <br>
 
-Ya hemos visto que en el discurso de Biden de 2022 había 1735 palabras diferentes (palabras tipo), y vimos que cada una de ella aparece un número determinados de veces (_the_ aparece 300 veces, _and_ 264 y _to_ 234), pero no sabes cuántas son las palabras que conforman el discurso. Hay `6553` palabras token. la forma de calcularso es sumando todos los valores de `n` del objeto `tidy_words` y se consigue con la función `sum`.
+Ya hemos visto que en el discurso de Biden de 2022 había 1735 palabras diferentes (palabras tipo), y vimos que cada una de ella aparece un número determinados de veces (_the_ aparece 300 veces, _and_ 264 y _to_ 234), pero no sabes cuántas son las palabras que conforman el discurso. Hay `6553` palabras token. La forma de calcularlo es sumando todos los valores de `n` del objeto `tidy_words` y se consigue con la función `sum`.
 
 ```{r, message=FALSE, warning=FALSE}
 sum(tidy_words$n)
@@ -132,7 +134,7 @@ sum(tidy_words$n)
 
 ## Stopwords{-}
 
-Al dividir el texto en tokens, has visto que palabras corrientes como “the”, “to”, “and”, “of” y “we” están en lo alto de la tabla. estas palabras poco nos pueden decir del contenido del discurso (en otros tipos de análisis estas palabras son oro molido). Vas a borrarlas.
+Al dividir el texto en tokens, has visto que palabras tan usuales como “the”, “to”, “and”, “of” y “we” están en lo alto de la tabla. Estas palabras poco pueden decir del contenido del discurso (en otros tipos de análisis estas palabras son oro molido). Vas a borrarlas.
 
 ```{r, message=FALSE, warning=FALSE}
 data(stop_words)
@@ -140,23 +142,23 @@ tidy_words %>%
   anti_join(stop_words)
 ```
 
-A pesar de haber elminado todas las _palabras de función_ o _palabras vacías_ hay, sin embargo, algunas palabras muy corrientes y contracciones como “let's”, “that's”, “it's” o “we're”. Quizá te interese localizar todas aquellas palabras que se usan con muchísima más frecuencia en este texto de lo que se utilizan en un basto corpus del inglés. para conseguirlo, necesitas un dataset que recopile estas frecuencias. Uno muy bueno para eso es el de [Peter Norvig's](https://www.kaggle.com/datasets/rtatman/english-word-frequency) que se basa en el Google Web Trillion Word Corpus, que se ha contruido con textos extraidos de sitio web en inglés.
+A pesar de haber elminado todas las _palabras de función_ o _palabras vacías_ hay, sin embargo, algunas palabras muy corrientes y contracciones como “let's”, “that's”, “it's” o “we're”. Quizá te interese localizar todas aquellas palabras que se usan con muchísima más frecuencia en este texto de lo que se utilizan en un basto corpus del inglés. Para conseguirlo, necesitas un dataset que recopile estas frecuencias. Uno muy bueno para eso es el de [Peter Norvig's](https://www.kaggle.com/datasets/rtatman/english-word-frequency) que se basa en el Google Web Trillion Word Corpus, que se ha construido con textos extraidos de sitios web en inglés.
 
 ```{r, message=FALSE, warning=FALSE}
 word_frequencies <- read_csv("https://raw.githubusercontent.com/programminghistorian/jekyll/gh-pages/assets/basic-text-processing-in-r/word_frequency.csv")
 head(word_frequencies)
 ```
 
-La primera columna indica la lengua de que se trata (es siempe“en” de inglés), la segunda da la palabras y la tercera porcentaje de uso de cada palabra en el Trillion Word Corpus.
+La primera columna indica la lengua de que se trata (es siempe “en” = inglés), la segunda presenta las palabras y la tercera ofrece el porcentaje de uso de cada palabra en el Trillion Word Corpus.
 
-Para combinar todas estas frecuencias con la table en la que tienes con los datos del discurso de Biden de 2022, usarás la función `inner_join`. esta función toma dos tablas (o dos dataset) y los combina en una solo en virtud de las columnas que tengan el mismo nombre; en este caso la columna común es la llamada `word`.
+Para combinar todas estas frecuencias con la tabla en la que tienes con los datos del discurso de Biden de 2022, usarás la función `inner_join`. esta función toma dos tablas (o dos dataset) y los combina en una sola en virtud de las columnas que tengan el mismo nombre; en este caso la columna común es la llamada `word`.
 
 ```{r, message=FALSE, warning=FALSE}
 tidy_words %>%
   inner_join(word_frequencies) %>%
   filter(frequency < 0.1)
 ```
-Esta lista ya empieza a tener un aspecto mejor. Términos como “america”, “american(s)”, “year”, “people” y “world” han escalado hasta la parte superior de la tabla y ya podemos especular que aparecen con muchas frencuencia en discursos de políticos, como es el caso del SOTU, pero su ocurrencia es relativamente menor en otros dominios. Si establecieras un umbral mucho más bajo, digamos del 0.02, podrás ver un resumen mucha más interesante del discurso.
+Esta lista ya empieza a tener un aspecto mejor. Términos como “america”, “american(s)”, “year”, “people” y “world” han escalado hasta la parte superior de la tabla y ya podemos especular que aparecen con muchas frecuencia en discursos de políticos, como es el caso del SOTU, pero su ocurrencia es relativamente menor en otros dominios. Si establecieras un umbral mucho más bajo, digamos del 0.02, podrás ver un resumen mucho más interesante del discurso.
 
 ```{r, message=FALSE, warning=FALSE}
 tidy_words %>%
@@ -164,9 +166,9 @@ tidy_words %>%
   filter(frequency < 0.02)
 ```
 
-Si haces clic en el `Next` de la parte baja de la tabla anterior, verás que aparecen algunos términos interesantes como “putin”, “ukrainian”, “allies”, “pandemic”, “deficit” e “inflation”. Estos paren ser algunos de los temas del discurso.
+Si haces clic en el `Next` de la parte baja de la tabla anterior, verás que aparecen algunos términos interesantes como “putin”, “ukrainian”, “allies”, “pandemic”, “deficit” e “inflation”. Estos parecen ser algunos de los temas del discurso.
 
-Antes de meterte en agua más profundas, vas ver un breve resumen basado en las cinco palabras más frecuentes de este discurso. para conseguirlo, necesitas otra trabla con una serie de metadatos que te permitan identificar totalmente cada uno de los discursos. Esta tabla coniene el nombre del Presidente, año del discurso, años en los que estuvo en la Casa Blanca (algo realmente irrelevante), partido al que pertenece y tipo de discurso, pues pueden escritos o hablados. Vas a cargarlo en tu ordenador.
+Antes de meterte en agua más profundas, vas a ver un breve resumen basado en las cinco palabras más frecuentes de este discurso. para conseguirlo, necesitas otra tabla con una serie de metadatos que te permitan identificar totalmente cada uno de los discursos. Esta tabla contiene el nombre del Presidente, el año del discurso, años en los que estuvo en la Casa Blanca (algo realmente irrelevante), partido al que pertenece y tipo de discurso, pues pueden escritos o hablados. Vas a cargarlo en tu ordenador.
 
 ```{r, message=FALSE, warning=FALSE}
 sotu_meta <- read_tsv("https://raw.githubusercontent.com/7PartidasDigital/MLex/master/sotu_meta.txt")
@@ -174,7 +176,7 @@ sotu_meta <- read_tsv("https://raw.githubusercontent.com/7PartidasDigital/MLex/m
 sotu_meta
 ```
 
-Ya es hora de resumirlo en una sola línea. Al final de la instrucción hay un `5`, lo cual implica que seleccionará las cinco palabras más utilizadas, se puede incrementar a la cantidad que quieras, pero una sumario de más de 10 paalbras será muy poco informativo).
+Ya es hora de resumirlo en una sola línea. Al final de la instrucción hay un `5`, lo cual implica que seleccionará las cinco palabras más utilizadas, se puede incrementar a la cantidad que quieras, pero un sumario de más de 10 palabras quizá sea muy poco informativo).
 
 ```{r, message=FALSE, warning=FALSE, error = FALSE}
 address_summary <- tidy_words %>%
@@ -189,7 +191,7 @@ Creo que se podía haber eliminado la palabra "tonight", no dice nada del tema, 
 
 ## Concordancias KWIC{-}
 
-Crear unas concardancias o tablas de palabras clave en contexto _key-word-in-context_ (KWIC) es uno de los procedimientos mñás usuales cuando se analizan datos textuales. No tienes que esforzarte mucho para conseguirlo, hay varias funciones que lo harán con sencillez. Utilizará la función `kwic` de la librería `quanteda` para crear una concordancia KWIC, pero exige dividir el texto en tokens con la función `tokens`. 
+Crear unas concordancias o tablas de palabras clave en contexto _key-word-in-context_ (KWIC) es uno de los procedimientos más usuales cuando se analizan datos textuales. No tienes que esforzarte mucho para conseguirlo, hay varias funciones que lo harán con sencillez. Utilizará la función `kwic` de la librería `quanteda` para crear una concordancia KWIC, pero exige dividir el texto en tokens con la función `tokens`, pero de la propia librería `quanteda`. 
 
 ```{r, message=FALSE, warning=FALSE}
 kwic_multiple <- last_sotu %>%
@@ -203,30 +205,33 @@ head(kwic_multiple)
 
 # Analizar todos y cada uno de los Discursos del State of the Union desde 1790 hasta 2024
 
-El primer paso para analizar todos el corpus de los discursos del State of the Union es hacer que R los lea todos a la vez. Esto implica utilizar, como has hecho antes, la función `readLines`, pero unirás todos los párrafos de cada uno de los discursos con la función`paste`, añadirás un sistema de identificación para saber qué discurso es cada uno de ellos. Todo eswte se tiene que hacer por medio de un bucle, porque quieres meter nada más y nada menos que 244 discursos en una única tabal (u objeto) llamada `all_sotu`.
+El primer paso para analizar todos el corpus de los discursos del _State of the Union_ es hacer que R los lea todos a la vez. Esto implica utilizar, como has hecho antes, la función `readLines`, pero unirás todos los párrafos de cada uno de los discursos con la función `paste`, añadirás un sistema de identificación para saber qué discurso es cada uno de ellos. Todo esto se tiene que hacer por medio de un bucle, porque quieres meter nada más y nada menos que 244 discursos en una única tabla (u objeto) llamada `all_sotu`.
 
-As the files are in the web, the very first step is to declare the full url for every speech and an empty table (`all_sotu`) to hold all the texts. The instruction to create the file names is a two steps process. Firstly we will store the invariable part of the URL in `base_url`. An secondly, to create the file names, that are made up of a number between `1` and `243`, we will use the `sprintf` function, that allows a formula to add the numbers, with leading zeros, from `001` … `099`… `243`, to the file extension `.txt` and glue it the invariable part of the url. 
+Puesto que los ficheros se encuentran en la web, el primer paso es declarar la url completa de cada discurso y crear una tabla vacía (`all_sotu`) para guardar todos los teextos.
+
+La instrucción para crear los nombrs de los ficheros es un proceso que requiere dos pasos. En primer lugar, se ha de guardar (almacenar) la parte _fija_ de la URL en el objeto `base_url`. Y, en segundo lugar, hay que crear los nombres de los ficheros que están construidos por un número entre `1` y `244`.
+Está es, aparentemente, la parte más complicadilla, pues la secuencia de `1` a `244` debe estar precedido por uno (para los números `10` a `99`) o dos (para los números entres el `1`  y el `9`) ceros. La función ideal para esto es `sprintf`, que permite una fórmula para añadir los números con los ceros a la izquierda, en nuestro caso entre `001` … `099`… `244`, que incorpore la extensión `.txt` y que la añada al final de la parte fija de la url. 
 
 ```{r, message=FALSE, warning=FALSE}
 base_url <- "https://raw.githubusercontent.com/7PartidasDigital/MLex/master"
-files <- sprintf("%s/sotu/%03d.txt", base_url, 1:243)
+files <- sprintf("%s/sotu/%03d.txt", base_url, 1:244)
 all_sotu <- NULL
 ```
 
-You may be wondering how the urls have turned out. Let's us cheks the six first with the `head` function.
+Quizá te estés preguntado qué aspecto tienen las URL que acabas de crear. Vas a echarle una ojeada a las seis primeras con la función `head`.
 
 ```{r, message=FALSE, warning=FALSE}
 head(files)
 ```
 
-and the last six with the and `tail` function.
+y las seis últimas con la función `tail`.
 
 
 ```{r, message=FALSE, warning=FALSE}
 tail(files)
 ```
 
-Now we can read them all into a table (it will take a bit)
+Ahora ya puedes leer todos los discursos e incorporarlos a la tabla (le llevará unos dos minutos o un poquito más.)
 
 ```{r, message=FALSE, warning=FALSE}
 for (i in 1:length(files)) {
@@ -238,16 +243,16 @@ for (i in 1:length(files)) {
 }
 ```
 
-And will attach to it the metadata stored in `sotu_meta`:
+Además, le vaas a añadir los metadatos que tienes guardados en `sotu_meta`:
 
 ```{r, message=FALSE, warning=FALSE}
 all_sotu <- full_join(all_sotu, sotu_meta, by="speech")
 ```
 
 
-## Exploratory Analysis
+## Análisis exploratorio
 
-Now we have all the elements we need to analyze all SOTU speeches. Let's begin by split them into tokens. The already seen `unnest_tokens` function will do it in secs.
+ya tienes todos los elementos que necesitas para analizar todos los discursos SOTU de los últimos 244 años. Lo primero es dividirlos en tokens. Ya has visto que ña función  `unnest_tokens` los puede hacer en poquísimo tiempo.
 
 ```{r, message=FALSE, warning=FALSE}
 all_words <- all_sotu %>%
@@ -255,9 +260,9 @@ all_words <- all_sotu %>%
 all_words
 ```
 
-He have at the tip of our fingers a corpus of a little over 2M tokens (exactly 2,009,343 tokens). From here you can posit several questions as Is there a temporal pattern to the length of addresses? How do the lengths of the past several administration’s speeches compare to those of FDR, Abraham Lincoln, and George Washington?
+Tienes al alcance de los dedos un corpus de poco más de 2.000.000 de palabras (exactamente 2.017.504 tokens). Ahora puedes plantearte muchas preguntas como ¿Hay un patrón temporal que pueda explicar la diferente extensión de cada discurso? ¿Cómo se compara la extensión de los discursos de las últimas administraciones con los de Franklin D. Roosevelt, Abraham Lincoln y George Washington?
 
-The best way to see this is by using a scatter plot. You can draw it by using the `ggplot` function, putting the year on the x-axis and the length in words `n` on the y-axis.
+La mejor manera para observar esto es con un gráfico de dispersión. Se puede dibujar con la función `ggplot`, para ello pondrás el año en el eje X (el horizontal) y la longitud, entendida como el número de palabras o tokens  `n` en el eje vertical (o `y`).
 
 ```{r message=FALSE, warning=FALSE}
 all_words %>%
@@ -268,7 +273,7 @@ all_words %>%
                  n))
 ```
 
-It seems that for the most part addresses steadily increased in length from 1790 to around 1850, decreased for a few years, and then increased again until the end of the 19th century. The length dramatically decreased around World War I, with a handful of fairly large outliers scattered throughout the 20th century. By 2001 their length decreased and begun a new increase. Is there any rational behind these changes? As we have seen, some presidents delivered written message while other delivered orally. Will it be the reason? To find out, let's colour the points using the `color` argument asking it to colour it by the value of `sotu_type`.
+Parece ser que entre 1790 y 1850 la longitud de los discursos aumentó progresivamente la longitud de los discursos, durante unos pocos anos decreción, y volvieron a crecar hasta finales del siglo XIX. La extensión disminuyó drásticamente en la época de la I Gerra Mundial, aunque a lo largo del siglo XX hay una puñado de discursos muy extensos. Hacia 2001 disminuyeron y comenzaron a alargarse de nuevo. ¿Hay alguna razón para este vaivén en las longitud de los discursos. Has visto que algunos presidentes predentaron sus discursos por escrito mientras que otros los leyeron. ¿Es esta la razón? Puedes averiguarlo en segundos. Para ello vas a emplear el argumento `color` para que los coloree de acuerdo con el valor de la variable `sotu_type`.
 
 ```{r message=FALSE, warning=FALSE}
 all_words %>%
@@ -280,9 +285,10 @@ all_words %>%
                  n,
                  color = sotu_type))
 ```
-As you can see that the rise in the 19th century occurred when the addresses switched to written documents, and the dramatic drop comes when Woodrow Wilson (in 1913) broke tradition and gave his State of the Union as a speech in the Congress. The outliers (the longest one) were all written addresses given after the end of World War II.
 
-Another question we can ask ourselves is whether membership of one party or another has an influence on the length of speeches? We can fiond out changing the argument of `color` from `sotu_type` to `party`.
+Pues eso parece. El incremento que se da a lo largo del siglo XIX se debe a que se pasó de un discurso oral a otro escrito. El cambio radical se produjo cuando cuando Woodrow Wilson (en 1913) volvió al origen, y lo hizo oralmente en el Congreso de Estados Unidos. Como puedes ver, los _outliers_ (los más largos) se presentaron todos por escrito tras la Segunda Guerra Mundial.
+
+Otra pregunta que te puedes hacer es si el pertenecer a uno u otro partido tiene alguna influencia en la extensión de los discursos. Lo puedes averiguar en segundos con tan solo cambiar con cambiar que el argumento `color` use `party` en vez de `sotu_type`.
 
 ```{r message=FALSE, warning=FALSE}
 all_words %>%
@@ -294,9 +300,12 @@ all_words %>%
                  n,
                  color = party))
 ```
-It does not seem that the parties have anything to do, but it is curious that since the late 1990s the Democrats are the ones who make the longest speeches. But let's leave these questions, they are more of a student of politics than linguistics.
 
-We saw that texts can be divided into sentences. A feature of style, and of the possible complexity of a text, is the length of sentences. So let's split all speeches into sentences and count how many words.
+No parece que el ser de de uno u otro partidos tenga nada que ver con la extensión. Lo más curioso es que desde finales de la década de 1990 los discursos más extensos fueron de presisdentes Demócratas.
+
+Como veís, hasta ahora solo nos hemos planteado preguntas que se podrían hacer un estudiante de políticas o de historia, pero podemos hacernos otras que interesen a otros especialistas.
+
+Has visto que puedes dividir el texto en oraciones. la longitud de estas puede ser un posible rasgo estilo, e incluso puede hablar de la complejidad del texto. Así que vamos a dividirlos en oraciones y contar cuántas palabras tiene cada uno de ellos.
 
 ```{r message=FALSE, warning=FALSE}
 all_sentences <- all_sotu %>%
@@ -307,7 +316,7 @@ all_sentences <- all_sotu %>%
                             pattern = "\\w+"))
 ```
 
-Now let's calculate the median and plot it, as we did with the number of words.
+Calculemos la mediana y vamos a verla un una gráfica, es más claro que una tabla con 244 líneas de números.
 
 ```{r message=FALSE, warning=FALSE}
 all_sentences %>%
@@ -319,9 +328,9 @@ all_sentences %>%
                  median))
 ```
 
-The plot shows a strong general trend in shorter sentences over time. Recall that a few addresses in the later half of the 20th century were long, written addresses much like those of the 19th century. It is particularly interesting that these do not show up in terms of the median sentence length. This points out at least one way in which the State of the Union addresses have been changed and adapted over time: shorter sentences.
+La gráfica muestra que, a lo largo del tiempo, hay una tendencia general a usar oraciones cada vez más cortas. Recuerda que algunos de los discursos tras la Segunda Guerra Mundial fueron escritos, como la gran mayoría de los del siglo XIX. Está claro que a mayor extensión del discurso, a pesar de estar escrito, nada tiene que ver con la longitud de las oraciones. Es evidente que los discursos de los presidentes nortamericanos han tendido a usar oraciones cada vez más cortas.
 
-To make the pattern even more explicit, it is possible to add a smoothing line over the plot with the  `geom_smooth` function. Smoothing lines are a great addition to many plots. They have a dual purpose of picking out the general trend of time series data, while also highlighting any outlying data points.
+Para verlo de una manera más evidente, es posible incorporar una línea que marque la tendencia con la función `geom_smooth`. Este tipo de línea son de gran ayuda en muchas gráficas. Tienen un doble proósito: marcan la tendencia general a lo largo de una serie temporal y muestran con mayor claridad los datos atípicos.
 
 ```{r message=FALSE, warning=FALSE}
 all_sentences %>%
@@ -334,7 +343,7 @@ all_sentences %>%
     geom_smooth()
 ```
 
-A warning! It is true that there is a general tendency to shorten the length of sentences in speeches, but there is a small problem that I have not taken into account and, although it would not change the final results, it must be taken into account. The tokenizer consider as sentence limits periods, and question and admirations marks, and within these texts there are quite a few abbreviations as mr, as you can see en the following table.
+¡AVISO! Es cierto que hay una tendencia general a acortar las oraciones, pero hay un pequeño problema que no he considerado y que podría tener cierta influencia en los resultados finales, por lo que debéis tenerlo en cuenta. El toquenizador, es decir, las instrucciones que dividen el texto en oraciones considera que el límite de las oraciones son uno de estos tres casos: puntos, signo de admiración y signos de interrogación. A lo largo de estos textos hay unas cuantas abreviaturas, como _Mr._, como se puede ver en esta tabla.
 
 ```{r message=FALSE, warning=FALSE}
 all_words %>%
@@ -342,9 +351,13 @@ all_words %>%
   select(word)
 ```
 
-## Most characteristic words of every president (Keywords){-}
+## Las palabras más características de cada presidente (Palabras clave){-}
 
-We have seen the most used bigrams in every president speech. They are very illustrative, but they are not the most characteristic words of each of the presidents. Let’s split the texts of all speeches by president, not the individual speeches. In the table below you can see that Roosevelt's most frequent word is “the” and his second most frequent word is “of”. They are the usual common and meaningless words.
+
+Has visto los bigramas más frecuentes de cada uno de los presidentes, pero no son nada ilustrativos, pues no ofrecen las palabras más interesantes de cada uno de ellos.
+
+Vas a analizar los discursos de cada presidente, pero no desde el punto de vista de los discrusos individuales, sino del conjunto de cada uno de ellos.La talba que hay a continuación te mostrará que la palabra más frecuente de Roosevelt es el artículo “the” y la seguna más utilizada es la preposición “of”. Son tan corrientes que no tienen ningún interés.
+
 ```{r message=FALSE, warning=FALSE}
 all_words_by_president <- all_sotu %>%
   unnest_tokens(word, text) %>%
@@ -355,7 +368,7 @@ all_words_by_president <- all_sotu %>%
 all_words_by_president
 ```
 
-There is a way to find the most important words in every set (series of speeches for each president) of speeches by comparing between them. The maths behind are complicated, but that's one of the beauties of R and all the libraries that are available. Ono of the methods to find out the most important or characteristic words of every president (or any other text) is know the Term Frequency–Inverse Document Frequency (tf-idf), a statistical measure of keyness which reflects how characteristic a word is of a specific text. Term Frequency–Inverse Document Frequency is based on the frequencies of words in a text compared to the frequency of documents in which it occurs. To find these words it is very easy with the `bind_tf_idf` function. 
+Sin embargo, hay una manera de localizar las palabras más importantes de cada subcorpus (serie de discursos pronunciados por cada presidente) y se consigue comparándolos entre sí. Las mátemáticas que hay tras esto son de infarto, pero una de las cosas admirables de R y de todas las librería que existen es que ha habido quienes se han ocupado de ofrecernos funciones sencillas de usar. Uno de los métodos para extraer las palabras mñas importantes o característica de cada presidente (o de cualquier otro texto) es el llamado Term Frequency–Inverse Document Frequency, o tf-idf para abreviar. Es una análisis estadístico que calcula cuáles son las palabras clave de un texto y, por lotanto, reflejan cuán características son dentro de un texto dado. El Term Frequency–Inverse Document Frequency calcula la frecuencia de cada palabra de un texto y la compara con la frecuencia que ofrece en los documentos en los que aparece. la explicación no es muy clara, pero cómo hallar los valores, y por tanto las palabras, es algo sencillo gracias a la función `bind_tf_idf`.
 
 ```{r eval = FALSE, message=FALSE, warning=FALSE}
 all_words_by_president %>%
@@ -388,7 +401,7 @@ all_words_by_president %>%
 knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/MLex/master/image/MLex_010.png")
 ```
 
-There're too many figures, they might be of insterest, but they are meaningless for us. So let’s remove them. To do it we have to redo some work. We have to split in tokens al the speeches, but before doing so, we have to delete all digits with the `mutate` function.
+Hay demasiados cifras, pueden que tengan algún significado, pero son un sinsentido para nosotros. Así que borrémoslos. Para hacerlo hay que rehacer parte del trabajo. Hay que dividir en palabras todos los dicursos, pero lo primero que hay que hacer es borrar todos los números con la función `mutate`.
 
 ```{r message=FALSE, warning=FALSE}
 all_words_by_president <- all_sotu %>%
@@ -397,7 +410,7 @@ all_words_by_president <- all_sotu %>%
   count(president, word, sort = T)
 ```
 
-Once done, we can plot it again. Nothing changes here.
+Una vez hecho, hay que redibujar el gráfico. No hay que hacer nada nuevo.
 
 ```{r eval = FALSE, message=FALSE, warning=FALSE}
 all_words_by_president %>%
@@ -429,13 +442,14 @@ all_words_by_president %>%
 ```{r echo=F, fig.cap="", message=FALSE, warning=FALSE, fig.align="center", out.width='10%'}
 knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/MLex/master/image/MLex_011.png")
 ```
-Now the charts are more meaningful, and it is up to you to interpret them. But there’re some problems we should be aware. If you pay attention to Kennedy's chart you’ll see “viet” and “nam”, but it is one word “viet-nam”. The very same happens with Bush Jr.’s “al-Qaida”, it¸s splited into two segments “al” and “qaida”. So when using these techniques to mine texts we must be aware of the hidden problems texts can contain.
+Ahora los gráficos tienen algo más de sentido y depende de ti la interpretación. Hay una serie de problemas que debes tener en cuenta . Si te fijas en el gráfico de  Kennedy verás que aparecen “viet” y “nam”, pero son una sola palabra “viet-nam”. Lo mismo sucede en el de Bush Jr. “al-Qaida” se ha dividido en los segmentos “al” y “qaida”. Por lo tanto, cuando uses estas técnicas para minar textos, tienes que tener en cuenta los problemas que puede haber escondidos en los textos.
 
-## Collocations{-}
+## Colocaciones{-}
 
-According to Altenberg (1991: 128), “roughly 70% of the running words in the corpus form part of recurrent word combinations of some kind.” The investigation of such word combinations in corpora of authentic language dates back to the earliest studies of collocations by Firth (1957) who summarised this principle as “you shall know a word by the company it keeps”.
+Según Altenberg (1991: 128), “Aproximadamente el 70% de las palabras que constituyen un corpus forman parte de combinaciones de palabras usuales”. La investigación de tales combinaciones de palabras en corpus se remonta a los primeros estudios de Firth (1957) sobre colocaciones, quien resumió este principio con una sucinta frase: “reconocerás una palabra por la compañía que tiene”.
 
-In this section we will see the collocations offered by all SOTU speeches. We have seen that a text can be divided into individual words (tokens) but also into n-grams (secuences of n-words or n-tokens). Let's split all SOTU speeches into bigrams.
+
+En esta sección vas a ver todas las colocaciones que ofrecen los discursos presidenciales. Ya has visto que se puede dividir un textos en tokens, pero también en _n-grams_, es decir, secuencias de n-palabras o n-tokens). Dividamos todos los discursos en bigramas, en secuencias de dos palabras / tokens.
 
 ```{r message=FALSE, warning=FALSE}
 all_bigrams <- all_sotu %>%
@@ -450,11 +464,11 @@ all_bigrams %>%
   count(bigram, sort = T)
 ```
 
-As usual, the result is not very informative. Again grammatical words, prepositions, determiners and conjunctions float to the top of the table (the exception, expected, is “united states”). We might be tempted to use the `anti_join()` function to erase empty words (function words). However, we can not do it directly since in the list of stopwords that is loaded (`stop_words`) there are only unigrams, there are no bigrams, so the system would not work.
+Como ya has visto, el resultado no es muy ilustrativo. De nuevo son las palabras gramaticales —preposiciones, artículos, conjunciones…— las que aparecen en primer lugar. La única excepción, esperable, es _United States_. Podríamos estar tentados de usar la función `anti_join()` para borrarlas. Sin embargo, no lo puedes hacer directamente puesto que la lista de palabras vacías, o _stopwords_ que has cargado solo contienen unigramas, no hay ni un solo bigramas, por lo que no funcionaría.
 
-The solution is to separate the bigrams constituents and delete all stopwords. Although you can put everything in one chuck of code, I will present it to you in several steps so that you can see the procedure and its logic.
+La solución se, una vez aue tenemos los bigramas, separar los dos constituyentes y borrar las palabraas vacías. Aunque se puede hacer todo con un solo bloque de código, lo voy a presentar en varios pasos, para que puedas ver la lógica del procedimiento.
 
-First, you will separate the two elements with the `separate()` function, and keep each bit in two different columns, `word1` and `word2`.
+En primer lugar vasa separar los dos elementos con la función `separate()` y los vas a conservar en dos caloumnas que llamaremos `word1` y `word2`.
 
 ```{r message=FALSE, warning=FALSE}
 separated_bigrams <- all_bigrams %>%
@@ -468,9 +482,9 @@ separated_bigrams %>%
   count(word1, word2, sort = T)
 ```
 
-It looks identical to the table that was printed when we splited the texts into bigrams, but now each of the two parts is in a different variable.
+Tiene casi el mismo aspecto que la tabla que se imprimió cuando dividimos los texto en bimagras, pero cada una de las partes está en una columna (variable) diferente.
 
-The next step is to delete all stopwords, but we will not make use of the `anti_join` function. You are going to extract with `%in%` all stopwords, both in the column `word1` and `word2`, that are not –`!`– in the column `word` of the object `stop_words`.
+El siguiente paso es borrar todas las palabras vacías, pero no puedes usar la función `anti_join`. Vas a extraer todas las palabras vacías con `%in%`, tanto de la columna `word1` como de `word2`, y que no se encuentren la columna –`!`– en la columna `word` dle objeto `stop_words`. es un galimatías, lo sé.
 
 ```{r message=FALSE, warning=FALSE}
 filtered_bigrams <- separated_bigrams %>%
@@ -483,7 +497,7 @@ filtered_bigrams %>%
   count(word1, word2, sort = T)
 ```
 
-But what you¸re looking at aren’t bigrams, they’re two contiguous words hold in two different columns. We have to reconstruct the bigrams and we will achieve it with the `unite()` function, which brings together into a single column the values contained in two or more columns.
+Aunque te lo pueda parecer, no estás viendo bigramas, tan solo estás viendo dos palabras contiguas en dos columanas diferentes. Hay que reconstruir los bimagras y se consigue con la función `unite()`, que reune en una sola columna los valores que haya en dos o más columnas.
 
 ```{r message=FALSE, warning=FALSE}
 united_bigrams <- filtered_bigrams %>%
@@ -495,7 +509,7 @@ united_bigrams %>%
   count(bigram, sort = T)
 ```
 
-Now we will plot a graph with the bigrams that each president used most frequently. (It will take a bit of time to plot it.)
+Ahora podemos trazar un gráfico que nos permita ver qué bigramas utiliza con mayor frecuencia cada presidente. Le llevará un poco de tiempo dibujarlo ().
 
 ```{r eval= FALSE, message=FALSE, warning=FALSE}
 united_bigrams %>%
@@ -513,7 +527,7 @@ united_bigrams %>%
                                        "Dwight D. Eisenhower", "John F. Kennedy", "Lyndon B. Johnson",
                                        "Richard M. Nixon", "Gerald R. Ford", "Jimmy Carter",
                                        "Ronald Reagan", "George Bush", "William J. Clinton",
-                                       "George W. Bush", "Barack Obama", "Donald Trump", "Joe Biden")))
+                                       "George W. Bush", "Barack Obama", "Donald Trump", "Joe Biden"))) %>%
   count(president, bigram, sort = T) %>%
   group_by(president) %>%
   top_n(5) %>%
@@ -528,12 +542,13 @@ united_bigrams %>%
 knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/MLex/master/image/MLex_009.png")
 ```
 
-There’re many other mining possibilities, as the Part-of-Speech (PoS) tagging which identifies the word classes of words (e.g., noun, adjective, verb, etc.) in a text and adds part-of-speech tags to each word. But we haven’t enough time. I hope this short tutorial serves to awaken your curiosity and you will dare to get the most out of this programming language.
+Hay muchas otras posibilidades, como el análisis morfológico (Part-of-Speech (PoS) tagging) que permite identificar a qué clase de palabras pertenece cada una de ellas (p. e., sustantivo, adjectivo, verbo, etc.). Lo que se consigue es añadir a cada palabra del texto la etiqueta gramatical. Pero no tenemos tiempo. Lo único que me importa es que que este taller os haya despertado el interés por hacer minería de textos con el uso de R. Las posibilidades son enormes. Sé que lo he limitado a textos en inglés, pero puedes usar la lengua que te interese.
+
 
 <div class="warning" style='padding:0.1em; background-color:#008080; color:#f2f2f2'>
 <span>
 <p style='margin-top:1em; text-align:center'>
-<b>REMEMBER!</b></p>
+<b>¡RECUERDA!</b></p>
 <p style='margin-left:1em;'>
 </p></span>
 </div>
@@ -551,7 +566,7 @@ sessionInfo()
 <span>
 <p style='margin-top:1em; text-align:center'>
 <b>NOTE</b>
-<br>This R Notebook is based on some [Ladal](https://ladal.edu.au/tutorials.html), [Programming Historian](https://programminghistorian.org/en/lessons/basic-text-processing-in-r) and [CuentaPalabras](http://www.aic.uva.es/cuentapalabras/) tutorials.<br>For linguistics I highly recommend Ladal tutorials.</p>
+<br>Este cuaderno se basa en algunos tutoriales de [Ladal](https://ladal.edu.au/tutorials.html), [Programming Historian](https://programminghistorian.org/en/lessons/basic-text-processing-in-r) y [CuentaPalabras](http://www.aic.uva.es/cuentapalabras/).<br>Para quienes tengan intereses lingüísticos, recomiendo los tutoriales Ladal.</p>
 <p style='margin-left:1em;'>
 </p></span>
 </div>
