@@ -18,7 +18,7 @@ output:
 
 Este documento contiene los instrucciones para el taller *R para los de Letras* ofrecido por la [Facultad de Filosofía y Letras](https://fyl.uva.es/) de la [Universidad de Valladolid](https://www.uva.es/export/sites/uva/).
 
-El objetivo de este taller es introducirse en el uso de R como herramienta para analizar datos textuales, pero ofrece información valiosa para cualquiera que quiera introducirse en R. 
+El objetivo de este taller es introducirse en el uso de R como herramienta para analizar datos textuales, pero ofrece información valiosa para cualquiera que quiera introducirse en R.
 
 Este taller está dirigido a principiantes con el objetivo de mostrar cómo configurar una sesión de R en RStudio, cómo configurar proyectos en R y cómo realizar operaciones básicas usando R.
 
@@ -69,13 +69,13 @@ Por favor, sigue las instrucciones que hay a continuación para instalar R y RSt
 
   + Tienes un Mac? 
 
-    - Desarga R. Si tienes un ordenador con los chips M1/M2/M3/M4 [usa este enlace](https://cran.rediris.es/bin/macosx/big-sur-arm64/base/R-4.4.2-arm64.pkg), pero si tu ordenador tiene un procesador Intel, entonces [usa este otro enlace](https://cran.rediris.es/bin/macosx/big-sur-x86_64/base/R-4.4.2-x86_64.pkg)
-    - Ejecuta el fichero `.pkg` que acaba de bajar (estará en la carpeta `Descargas`), y sigue las instrucciones
+    - Descarga R. Si tienes un ordenador con los chips M1/M2/M3/M4 [usa este enlace](https://cran.rediris.es/bin/macosx/big-sur-arm64/base/R-4.4.2-arm64.pkg), pero si tu ordenador tiene un procesador Intel, entonces [usa este otro enlace](https://cran.rediris.es/bin/macosx/big-sur-x86_64/base/R-4.4.2-x86_64.pkg)
+    - Ejecuta el fichero `.pkg` que acabas de bajar (estará en la carpeta `Descargas`), y sigue las instrucciones
     - Ahora descarga RStudio. [Este enlace lo descargará](https://download1.rstudio.org/electron/macos/RStudio-2024.12.0-467.dmg)
     - Cuando se haya descargado, ejecuta el fichero `.dmg` (estará en la carpeta `Descargas`), y sigue las instrucciones
     - Una vez que se haya finalizado la instalación, abre Rstudio y asegúrate de que funciona y de que no haya mensajes de error.
     
-Cuando arranques RStudio, verás que se abreve una ventana que se aparece a la de esta imagen (el fondo será blanco y no negro —ya llegará el momento de _tunearlo_—):
+Cuando arranques RStudio, verás que se abre una ventana que se aparece a la de esta imagen (el fondo será blanco y no negro —ya llegará el momento de _tunearlo_—):
 
 ```{r mlex01, echo=F, fig.cap="", message=FALSE, warning=FALSE, out.width='100%', fig.align="center"}
 knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/Taller-UVa/master/images/UVa_001.png")
