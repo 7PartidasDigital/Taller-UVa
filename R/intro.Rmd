@@ -16,7 +16,7 @@ output:
 
 # Introducción
 
-Este documento contiene los instrucciones para el taller *R para los de Letras* ofrecido por la [Facultad de Filosofía y Letras](https://fyl.uva.es/) de la [Universidad de Valladolid](https://www.uva.es/export/sites/uva/).
+Este documento contiene las instrucciones para el taller *R para los de Letras* ofrecido por la [Facultad de Filosofía y Letras](https://fyl.uva.es/) de la [Universidad de Valladolid](https://www.uva.es/export/sites/uva/).
 
 El objetivo de este taller es introducirse en el uso de R como herramienta para analizar datos textuales, pero ofrece información valiosa para cualquiera que quiera introducirse en R.
 
@@ -58,7 +58,7 @@ Por favor, sigue las instrucciones que hay a continuación para instalar R y RSt
     - Descarga R. [Este enlace lo desacargará](https://cran.rediris.es/bin/windows/base/R-4.4.2-win.exe)
     - Ejecuta el fichero `.exe` que acabas de descargar (se encuentra en la carpeta `Descargas`), y sigue sus instrucciones
     - Ahora descarga RStudio. [Este enlace lo descargará](https://download1.rstudio.org/electron/windows/RStudio-2024.12.0-467.exe)
-    - Cuando se haya descargado, ejecuta el fichero `R-4.4.2-win.exe` (estará en la carpeta `Descargas`), y sigue las instrucciones
+    - Cuando se haya descargado, ejecuta el fichero `R-STUDIO-2024.12.0-467.exe` (estará en la carpeta `Descargas`), y sigue las instrucciones
     - Una vez haya finalizado la instalación, abre Rstudio y asegúrate de que funciona y de que no hay mensajes de error.
 
 <div>
@@ -83,7 +83,7 @@ knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/Tall
 
 # R y RStudio. Lo básico{-}
 
-RStudio es un IDE (Integrated Development Environment), una especie de escritorio que facilita el acceso a R. La gran ventaja es de este aplicativo es que se pueden gestionar con gran facilidad los _scripts_ de R, los ficheros y los directorios de los proyectos. Este entorno de trabajo permite editar y ejecutar el código (_scripts_), ver los resultados y los gráficos que dibuje. Es más, se pueden ver las variables y los objetos que se están ejecutando en la ventana `Environment` (más, más abajo 👇).
+RStudio es un IDE (Integrated Development Environment), una especie de escritorio que facilita el acceso a R. La gran ventaja de este aplicativo es que se pueden gestionar con gran facilidad los _scripts_ de R, los ficheros y los directorios de los proyectos. Este entorno de trabajo permite editar y ejecutar el código (_scripts_), ver los resultados y los gráficos que dibuje. Es más, se pueden ver las variables y los objetos que se están ejecutando en la ventana `Environment` (más, más abajo 👇).
 
 ## RStudio: Paneles{-}
 
@@ -103,7 +103,7 @@ Los paneles del entorno (Global Environment) y gestión están en la parte de de
 * **Help** (abajo): Es donde buscar la ayuda de cualquier librería o función.
 * **Files** (abajo): Muestra los ficheros que hay en el directorio de trabajo. Tienes varias posibilidades (crear nuevos directorios o carpetas (_New Folder_), crear un nuevo fichero (_New File_), borrarlo (_Delete_), renombrarlo (_Rename_) y otras varias posibilidades en ⚙️ _More_)
 
-### Consola de R (ventana inferior izquierdo){-}
+### Consola de R (ventana inferior izquierda){-}
 
 La consola permite ejecutar inemdiatamente cualquier función o instrucción de R. Aquí puedes experimentar con las funciones, o, sencillamente, imprimir los datos para verlos.
  
@@ -123,7 +123,7 @@ Para usarlo hay que escribir la orden tras `>` y pulsar ⏎ para ejecutar la ord
 
 1. Puedes utilizar R como una sencilla calculadora. Escribe `2+8` en la **consola**, como te muestro en la imagen que hay a continuación, y pulsa ⏎.
 
-```{r echo=F, fig.cap="", message=FALSE, warning=FALSE, out.width='75%', fig.align="center"}
+```{r echo=F, fig.cap="", message=FALSE, warning=FALSE, out.width='50%', fig.align="center"}
 knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/Taller-UVa/master/images/UVa_002.png")
 ```
 
@@ -138,7 +138,7 @@ knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/Tall
 
 ***
 
-En esta orden, el signo de adición `+` es el **operador**. Los operadores son símbolos que representan algún tipo de acción. R, sin embargo, es muchísimo más que una sencilla calculadora. Para poderle sacar el máximo partido es necesario comprender que son los **objetos**, las **funciones** y los **índices** (el número que aparece entre corchetes en los resultados que se imprimen en la consola). Aprenderás cómo usarlos según avanzamos.
+En esta orden, el signo de adición `+` es el **operador**. Los operadores son símbolos que representan algún tipo de acción. R, sin embargo, es muchísimo más que una sencilla calculadora. Para poderle sacar el máximo partido es necesario comprender qué son los **objetos**, las **funciones** y los **índices** (el número que aparece entre corchetes en los resultados que se imprimen en la consola). Aprenderás cómo usarlos según avanzamos.
 
 Por ahora, considera que los *objetos* son *nombres* y que las *funciones* son *verbos*. 
 
@@ -207,7 +207,7 @@ Al usar R, la mayoría de la funciones no están disponibles; es más, ni siquie
 
 Lo que has instalado de R es lo más básico ("base R"), trae consigo unas 30 librerías. Pero existen más de 10.000 librarías creadas y mantenidas por usuarios de todo el mundo; puedes saber de ellos y cómo utilizarlas en la red. En cualquier caso, hay un conjunto de librerías que es básico, pero que no está incluido en el _base R_. Se trata de `tidyverse`, que incluye `ggplot2`, una librería para dibujar magníficos gráficos y mapas.
 
-Antes de poder usar una librería, hay que instalarla en el ordenador (con la función `install.packages()`) y cargar en cada sesión de trabajo (con la función `library()`) en la que se quiera utilizar. Sin embargo, una librería (o paquete) solo se ha de instalar una vez, y una vez instado solo hay que cargarlo en la sesión de trabajo en la que sea necesario. Cuando se instala un paquete, es posible que se instalen otros varios que le son impresicindibles para funcionar adecuadamente. Cuando vengas al taller, debes tener instalado `tidyverse`, `tidytext`, `quanteda` y `tm`, de esta manera ahorraremos tiempo y problemas.
+Antes de poder usar una librería, hay que instalarla en el ordenador (con la función `install.packages()`) y cargar en cada sesión de trabajo (con la función `library()`) en la que se quiera utilizar. Sin embargo, una librería (o paquete) solo se ha de instalar una vez, y una vez instado solo hay que cargarlo en la sesión de trabajo en la que sea necesario. Cuando se instala un paquete, es posible que se instalen otros varios que le son imprescindibles para funcionar adecuadamente. Cuando vengas al taller, debes tener instalado `tidyverse`, `tidytext`, `quanteda` y `tm`, de esta manera ahorraremos tiempo y problemas.
 
 Recuerda que has de cargar las librerías en todas aquellas sesiones de R en las que las quieras utilizar. A continuación te muestro qué has de hacer para instalar las librerías `tidyverse`,  `tidytext`,  `quanteda` y `stopwords` (que son las que vamos a necesitar a lo largo de este taller). Corta y pega estas líneas de código en el editor de RStudio y ejecútalas (más atrás te conté cómo se hace).
 
@@ -218,7 +218,7 @@ install.packages("quanteda")
 install.packages("stopwords")
 ```
 
-Se estará un buen rato, depende de tu conexión a internet, mostrándote un motón de información en la consola. En la imagen siguiente te muestro algo de lo que podrías ver mientras instalas las librería. Ten en cuenta que esta es de una, y todas las que le son necearias, que no vas a necesitar por ahora. Al final te informa de dónde ha guardado las librerías.
+Se estará un buen rato, depende de tu conexión a internet, mostrándote un motón de información en la consola. En la imagen siguiente te muestro algo de lo que podrías ver mientras instalas las librería. Ten en cuenta que esta es de una, y todas las que le son necesarias, que no vas a necesitar por ahora. Al final te informa de dónde ha guardado las librerías.
 
 ```{r echo=F, fig.cap="", message=FALSE, warning=FALSE, fig.align="center", out.width='75%'}
 knitr::include_graphics("https://raw.githubusercontent.com/7PartidasDigital/Taller-UVa/master/images/UVa_013.png")
